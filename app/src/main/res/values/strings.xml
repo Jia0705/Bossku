@@ -2,4 +2,11 @@
     <string name="app_name">Bossku</string>
     <string name="home">Home</string>
     <string name="settings">Settings</string>
+    <string name="name">name</string>
+    <string name="category">category</string>
+    <string name="price">price</string>
+    <string name="ticketid">ticketId</string>
+    <string name="time">time</string>
+    <string name="total">total</string>
+    <string name="quantity">quantity</string>
 </resources>
