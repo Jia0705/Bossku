@@ -25,6 +25,27 @@ class ItemsRepo private constructor() {
         map.remove(id)
     }
 
+//    init {
+//        createRandomItems(10)
+//    }
+//
+//    fun createRandomItems(n: Int) {
+//        var count = 0
+//        while (count < n) {
+//            val item = Item(
+//                id = null,
+//                name = "Item $count",
+//                categoryId = 0,
+//                price = 0.0,
+//                cost = 0.0,
+//                barcode = null
+//            )
+//            addItem(item)
+//            count++
+//        }
+//    }
+
+
     companion object {
         private var instance: ItemsRepo? = null
 
