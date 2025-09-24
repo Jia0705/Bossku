@@ -13,6 +13,6 @@ class EditItemFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_item, container, false)
+        return inflater.inflate(R.layout.fragment_base_manage_item, container, false)
     }
 }

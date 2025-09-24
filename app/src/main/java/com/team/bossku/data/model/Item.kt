@@ -6,5 +6,7 @@ data class Item(
     val categoryId: Int,
     val price: Double,
     val cost: Double,
-    val barcode: String? = null
+    val barcode: String? = null,
+    val color: String
+
 )

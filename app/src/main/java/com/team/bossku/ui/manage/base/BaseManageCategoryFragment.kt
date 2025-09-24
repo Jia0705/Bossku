@@ -11,17 +11,17 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.team.bossku.R
-import com.team.bossku.databinding.FragmentBaseManageItemBinding
+import com.team.bossku.databinding.FragmentBaseManageCategoryBinding
 import kotlinx.coroutines.launch
 
-abstract class BaseManageItemFragment : Fragment() {
-    protected abstract val viewModel: BaseManageItemViewModel
-    protected lateinit var binding: FragmentBaseManageItemBinding
+abstract class BaseManageCategoryFragment : Fragment() {
+    protected abstract val viewModel: BaseManageCategoryViewModel
+    protected lateinit var binding: FragmentBaseManageCategoryBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = FragmentBaseManageItemBinding.inflate(inflater, container, false)
+        binding = FragmentBaseManageCategoryBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -30,7 +30,7 @@ abstract class BaseManageItemFragment : Fragment() {
 
         lifecycleScope.launch {
             viewModel.finish.collect {
-                setFragmentResult("manage_item", Bundle())
+                setFragmentResult("manage_category", Bundle())
 
                 val nav = findNavController()
                 val home = nav.popBackStack(R.id.homeFragment, false)
@@ -40,7 +40,7 @@ abstract class BaseManageItemFragment : Fragment() {
             }
         }
 
-       lifecycleScope.launch {
+        lifecycleScope.launch {
             viewModel.error.collect {
                 showError(it)
             }

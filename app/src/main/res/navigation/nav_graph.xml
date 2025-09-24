@@ -78,7 +78,7 @@
         android:id="@+id/addItemFragment"
         android:name="com.team.bossku.ui.manage.add.AddItemFragment"
         android:label="fragment_item"
-        tools:layout="@layout/fragment_item">
+        tools:layout="@layout/fragment_base_manage_item">
 
         <argument
             android:name="categoryId"
@@ -92,7 +92,7 @@
         android:id="@+id/editItemFragment"
         android:name="com.team.bossku.ui.manage.edit.EditItemFragment"
         android:label="fragment_item"
-        tools:layout="@layout/fragment_item">
+        tools:layout="@layout/fragment_base_manage_item">
 
         <argument
             android:name="itemId"
@@ -118,14 +118,14 @@
         android:id="@+id/addCategoryFragment"
         android:name="com.team.bossku.ui.manage.add.AddCategoryFragment"
         android:label="fragment_category"
-        tools:layout="@layout/fragment_category" />
+        tools:layout="@layout/fragment_base_manage_category" />
 
     <!-- CATEGORY: Edit -->
     <fragment
         android:id="@+id/editCategoryFragment"
         android:name="com.team.bossku.ui.manage.edit.EditCategoryFragment"
         android:label="fragment_category"
-        tools:layout="@layout/fragment_category">
+        tools:layout="@layout/fragment_base_manage_category">
 
         <argument
             android:name="categoryId"

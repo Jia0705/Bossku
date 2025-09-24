@@ -1,21 +1,17 @@
 package com.team.bossku.ui.manage.base
 
 import androidx.lifecycle.ViewModel
-import com.team.bossku.data.repo.ItemsRepo
+import com.team.bossku.data.repo.CategoriesRepo
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
-abstract class BaseManageItemViewModel(
-    protected val repo: ItemsRepo
+abstract class BaseManageCategoryViewModel(
+    protected val repo: CategoriesRepo
 ) : ViewModel() {
 
     val name = MutableStateFlow("")
-    val categoryId = MutableStateFlow<Int?>(null)
-    val price = MutableStateFlow("")
-    val cost = MutableStateFlow("")
-    val barcode = MutableStateFlow("")
     val color = MutableStateFlow("")
 
     protected val _finish = MutableSharedFlow<Unit>()
