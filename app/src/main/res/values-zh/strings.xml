@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Bossku</string>
+    <string name="home">首页</string>
+    <string name="settings">设置</string>
+    <string name="name">名称</string>
+    <string name="category">分类</string>
+    <string name="price">价格</string>
+    <string name="cost">成本</string>
+    <string name="barcode">条码</string>
+    <string name="color">颜色</string>
+    <string name="save">保存</string>
+    <string name="ticketid">小票编号</string>
+    <string name="time">时间</string>
+    <string name="total">总计</string>
+    <string name="quantity">数量</string>
+    <string name="search">搜索</string>
+    <string name="add_new">新增</string>
+    <string name="add_new_item">新增商品</string>
+    <string name="add_new_category">新增分类</string>
+    <string name="edit_item">编辑商品</string>
+    <string name="edit_category">编辑分类</string>
+    <string name="added_ticket">已添加到小票</string>
+    <string name="empty_item">当前没有商品</string>
+    <string name="empty_category">当前没有分类</string>
+    <string name="no_category">无分类</string>
+    <string name="items">商品</string>
+    <string name="categories">分类</string>
+    <string name="asc">升序</string>
+    <string name="des">降序</string>
+    <string name="id">ID</string>
+    <string name="theme">主题</string>
+    <string name="language">语言</string>
+    <string name="history">历史记录</string>
+    <string name="light">浅色</string>
+    <string name="dark">深色</string>
+</resources>

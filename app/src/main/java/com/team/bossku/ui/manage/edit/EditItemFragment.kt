@@ -71,8 +71,8 @@ class EditItemFragment : BaseManageItemFragment() {
             binding.acCategory.showDropDown()
         }
 
-        binding.acCategory.setOnItemClickListener { _, _, acC, _ ->
-            when (acC) {
+        binding.acCategory.setOnItemClickListener { _, _, pos, _ ->
+            when (pos) {
                 0 -> { // No category
                     storeCategoryId = -1
                     binding.acCategory.setText(getString(R.string.no_category), false)
@@ -83,7 +83,7 @@ class EditItemFragment : BaseManageItemFragment() {
                     findNavController().navigate(R.id.addCategoryFragment)
                 }
                 else -> {
-                    val cat = cats[acC - 1]
+                    val cat = cats[pos - 1]
                     storeCategoryId = cat.id ?: -1
                     binding.acCategory.setText(cat.name, false)
                 }

@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Bossku</string>
+    <string name="home">Laman Utama</string>
+    <string name="settings">Tetapan</string>
+    <string name="name">Nama</string>
+    <string name="category">Kategori</string>
+    <string name="price">Harga</string>
+    <string name="cost">Kos</string>
+    <string name="barcode">Kod Bar</string>
+    <string name="color">Warna</string>
+    <string name="save">Simpan</string>
+    <string name="ticketid">ID Resit</string>
+    <string name="time">Masa</string>
+    <string name="total">Jumlah</string>
+    <string name="quantity">Kuantiti</string>
+    <string name="search">Cari</string>
+    <string name="add_new">Tambah Baharu</string>
+    <string name="add_new_item">Tambah Item Baharu</string>
+    <string name="add_new_category">Tambah Kategori Baharu</string>
+    <string name="edit_item">Sunting Item</string>
+    <string name="edit_category">Sunting Kategori</string>
+    <string name="added_ticket">Ditambah ke Resit</string>
+    <string name="empty_item">Anda belum mempunyai item</string>
+    <string name="empty_category">Anda belum mempunyai kategori</string>
+    <string name="no_category">Tiada Kategori</string>
+    <string name="items">Item</string>
+    <string name="categories">Kategori</string>
+    <string name="asc">Menaik</string>
+    <string name="des">Menurun</string>
+    <string name="id">ID</string>
+    <string name="theme">Tema</string>
+    <string name="language">Bahasa</string>
+    <string name="history">Rekod</string>
+    <string name="light">Cerah</string>
+    <string name="dark">Gelap</string>
+</resources>
