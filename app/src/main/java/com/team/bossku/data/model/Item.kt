@@ -8,5 +8,4 @@ data class Item(
     val cost: Double,
     val barcode: String? = null,
     val color: String
-
 )

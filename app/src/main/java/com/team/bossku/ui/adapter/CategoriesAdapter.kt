@@ -2,6 +2,7 @@ package com.team.bossku.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.RecyclerView
 import com.team.bossku.data.model.Category
 import com.team.bossku.databinding.ItemLayoutCategoryBinding
@@ -36,6 +37,7 @@ class CategoriesAdapter(
         fun bind(category: Category) {
             binding.tvCategory.text = category.name
             binding.llCategory.setOnClickListener { onClick(category) }
+            binding.cvCategory.setCardBackgroundColor(category.color.toColorInt())
         }
     }
 }

@@ -19,5 +19,8 @@ abstract class BaseManageCategoryViewModel(
     protected val _error = MutableSharedFlow<String>()
     val error: SharedFlow<String> = _error
 
-    abstract fun submit()
+    abstract fun submit(
+        name: String,
+        color: String
+    )
 }

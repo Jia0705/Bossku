@@ -30,12 +30,12 @@ abstract class BaseManageItemFragment : Fragment() {
 
         lifecycleScope.launch {
             viewModel.finish.collect {
-                setFragmentResult("manage_item", Bundle())
+                setFragmentResult("manage_item", Bundle().apply { putBoolean("refresh", true) })
 
                 val nav = findNavController()
-                val home = nav.popBackStack(R.id.homeFragment, false)
+                val home = nav.popBackStack()
                 if (!home) {
-                    nav.popBackStack()
+                    nav.navigate(R.id.homeFragment)
                 }
             }
         }

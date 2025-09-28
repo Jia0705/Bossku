@@ -23,5 +23,12 @@ abstract class BaseManageItemViewModel(
     protected val _error = MutableSharedFlow<String>()
     val error: SharedFlow<String> = _error
 
-    abstract fun submit()
+    abstract fun submit(
+        name: String,
+        categoryId: Int,
+        price: Double,
+        cost: Double,
+        barcode: String,
+        color: String
+    )
 }

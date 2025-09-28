@@ -42,11 +42,6 @@ class HomeFragment : Fragment() {
         binding.toolbar.setOnLongClickListener {
             val switch = if (viewModel.mode.value == Mode.ITEMS) Mode.CATEGORIES else Mode.ITEMS
             viewModel.switchMode(switch)
-            Toast.makeText(
-                requireContext(),
-                if (switch == Mode.ITEMS) getString(R.string.items) else getString(R.string.categories),
-                Toast.LENGTH_LONG
-            ).show()
             true
         }
 
@@ -69,9 +64,9 @@ class HomeFragment : Fragment() {
         // Add item / Category
         binding.fabAdd.setOnClickListener {
             if (viewModel.mode.value == Mode.ITEMS) {
-                findNavController().navigate(R.id.action_home_to_addItem)
+                findNavController().navigate(R.id.addItemFragment)
             } else {
-                findNavController().navigate(R.id.action_home_to_addCategory)
+                findNavController().navigate(R.id.addCategoryFragment)
             }
         }
 
@@ -91,6 +86,13 @@ class HomeFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.mode.collect { mode ->
                 binding.rvItems.adapter = if (mode == Mode.ITEMS) itemsAdapter else categoriesAdapter
+
+                if (mode == Mode.ITEMS) {
+                    itemsAdapter.setItems(viewModel.rvItems.value)
+                } else {
+                    categoriesAdapter.setCategories(viewModel.rvCategories.value)
+                }
+
                 updateTexts()
                 updateEmptyVisibility()
             }
@@ -98,14 +100,14 @@ class HomeFragment : Fragment() {
 
         lifecycleScope.launch {
             viewModel.rvItems.collect { list ->
-                if (viewModel.mode.value == Mode.ITEMS) itemsAdapter.setItems(list)
+                itemsAdapter.setItems(list)
                 updateEmptyVisibility()
             }
         }
 
         lifecycleScope.launch {
             viewModel.rvCategories.collect { list ->
-                if (viewModel.mode.value == Mode.CATEGORIES) categoriesAdapter.setCategories(list)
+                categoriesAdapter.setCategories(list)
                 updateEmptyVisibility()
             }
         }

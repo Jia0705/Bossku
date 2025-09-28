@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.team.bossku.data.model.Item
 import com.team.bossku.databinding.ItemLayoutItemBinding
+import androidx.core.graphics.toColorInt
 
 class ItemsAdapter(
     private var items: List<Item> = emptyList(),
@@ -36,6 +37,7 @@ class ItemsAdapter(
         fun bind(item: Item) {
             binding.tvName.text = item.name
             binding.llItem.setOnClickListener { onClick(item) }
+            binding.cvItem.setCardBackgroundColor(item.color.toColorInt())
         }
     }
 }
