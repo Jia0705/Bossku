@@ -1,6 +1,6 @@
 package com.team.bossku.data.model
 
-data class Detail(
+data class TicketDetail(
     val id: Int?= null,
     val itemId: Int,
     val name: String,

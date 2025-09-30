@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white"
     tools:context=".ui.manage.base.BaseManageCategoryFragment">
 
     <!-- HEADER -->
@@ -134,15 +133,39 @@
 
         </LinearLayout>
 
-        <!-- SAVE BUTTON -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/mbSave"
-            android:layout_width="wrap_content"
+        <!-- Save + Delete -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/xxxxxl"
-            android:text="@string/save"
-            app:backgroundTint="@color/blue" />
+            android:layout_marginTop="@dimen/xxxxl"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <!-- SAVE -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/mbSave"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/save"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/blue" />
+
+            <Space
+                android:layout_width="@dimen/m"
+                android:layout_height="wrap_content" />
+
+            <!-- DELETE -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/mbDelete"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/delete"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/red" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

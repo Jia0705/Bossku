@@ -23,6 +23,8 @@ class EditItemFragment : BaseManageItemFragment() {
         binding.tvHeader.setText(R.string.edit_item)
         binding.ibBack.setOnClickListener { findNavController().popBackStack() }
         binding.mbSave.setOnClickListener { saveItem() }
+        binding.mbDelete.visibility = View.VISIBLE
+        binding.mbDelete.setOnClickListener { viewModel.deleteItem() }
 
         // Load item by id
         viewModel.loadItemById(args.itemId)

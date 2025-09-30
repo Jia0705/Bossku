@@ -22,6 +22,7 @@
     <string name="added_ticket">已添加到小票</string>
     <string name="empty_item">当前没有商品</string>
     <string name="empty_category">当前没有分类</string>
+    <string name="empty_history">暂无历史记录</string>
     <string name="no_category">无分类</string>
     <string name="items">商品</string>
     <string name="categories">分类</string>
@@ -33,4 +34,7 @@
     <string name="history">历史记录</string>
     <string name="light">浅色</string>
     <string name="dark">深色</string>
+    <string name="empty">空</string>
+    <string name="header">标题</string>
+    <string name="delete">删除</string>
 </resources>

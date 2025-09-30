@@ -29,5 +29,7 @@ class AddCategoryFragment : BaseManageCategoryFragment() {
             val color = viewModel.color.value.ifBlank { "#FFFFFF" }
             viewModel.submit(name, color)
         }
+
+        binding.mbDelete.visibility = View.GONE
     }
 }

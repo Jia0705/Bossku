@@ -17,6 +17,16 @@ class EditItemViewModel(
         color.value = item.color
     }
 
+    fun deleteItem() {
+        try {
+            val id = item.id ?: throw IllegalArgumentException("Invalid item id")
+            itemsRepo.deleteItem(id)
+            viewModelScope.launch { _finish.emit(Unit) }
+        } catch (e: Exception) {
+            viewModelScope.launch { _error.emit(e.message.orEmpty()) }
+        }
+    }
+
     override fun submit(
         name: String,
         categoryId: Int,

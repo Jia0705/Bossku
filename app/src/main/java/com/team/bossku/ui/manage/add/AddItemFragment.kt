@@ -22,6 +22,7 @@ class AddItemFragment : BaseManageItemFragment() {
         binding.tvHeader.setText(R.string.add_new_item)
         binding.ibBack.setOnClickListener { findNavController().popBackStack() }
         binding.mbSave.setOnClickListener { saveItem() }
+        binding.mbDelete.visibility = View.GONE
 
         // Color
         binding.c1.setOnClickListener { viewModel.color.value = "#FFFF0000" }

@@ -22,6 +22,7 @@
     <string name="added_ticket">Ditambah ke Resit</string>
     <string name="empty_item">Anda belum mempunyai item</string>
     <string name="empty_category">Anda belum mempunyai kategori</string>
+    <string name="empty_history">Tidak ada rekod</string>
     <string name="no_category">Tiada Kategori</string>
     <string name="items">Item</string>
     <string name="categories">Kategori</string>
@@ -33,4 +34,7 @@
     <string name="history">Rekod</string>
     <string name="light">Cerah</string>
     <string name="dark">Gelap</string>
+    <string name="empty">Kosong</string>
+    <string name="header">Tajuk</string>
+    <string name="delete">Padam</string>
 </resources>

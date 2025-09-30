@@ -8,6 +8,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.team.bossku.MainActivity
 import com.team.bossku.R
 import com.team.bossku.databinding.FragmentSettingsBinding
@@ -27,15 +28,15 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.llManageItems.setOnClickListener {
-
+            findNavController().navigate(R.id.action_settingsFragment_to_itemListFragment)
         }
 
         binding.llManageCategories.setOnClickListener {
-
+            findNavController().navigate(R.id.action_settingsFragment_to_categoryListFragment)
         }
 
         binding.llHistory.setOnClickListener {
-
+            findNavController().navigate(R.id.action_settingsFragment_to_historyListFragment)
         }
 
         // Language

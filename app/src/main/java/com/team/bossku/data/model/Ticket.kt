@@ -5,7 +5,7 @@ data class Ticket(
     val createdAt: Long,
     val status: TicketStatus = TicketStatus.OPEN,
     val closedAt: Long? = null,
-    val items: List<Detail> = emptyList()
+    val items: List<TicketDetail> = emptyList()
 ) {
     val total: Double get() = items.sumOf { it.total }
 }

@@ -29,42 +29,39 @@
             app:popExitAnim="@anim/to_right" />
 
         <action
-            android:id="@+id/action_home_to_detail"
-            app:destination="@id/detailFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right" />
-
-        <action android:id="@+id/action_home_to_ticket"
+            android:id="@+id/action_home_to_ticket"
             app:destination="@id/ticketFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
 
-        <action android:id="@+id/action_home_to_history"
+        <action
+            android:id="@+id/action_home_to_history"
             app:destination="@id/historyFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
 
-        <action android:id="@+id/action_home_to_settings"
+        <action
+            android:id="@+id/action_home_to_settings"
             app:destination="@id/settingsFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
 
-        <action android:id="@+id/action_home_to_addCategory"
+        <action
+            android:id="@+id/action_home_to_addCategory"
             app:destination="@id/addCategoryFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
 
-        <action android:id="@+id/action_home_to_editCategory"
+        <action
+            android:id="@+id/action_home_to_editCategory"
             app:destination="@id/editCategoryFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
@@ -73,7 +70,7 @@
 
     </fragment>
 
-    <!-- ITEM: Add  -->
+    <!-- ITEM: Add -->
     <fragment
         android:id="@+id/addItemFragment"
         android:name="com.team.bossku.ui.manage.add.AddItemFragment"
@@ -93,19 +90,6 @@
         android:name="com.team.bossku.ui.manage.edit.EditItemFragment"
         android:label="fragment_item"
         tools:layout="@layout/fragment_base_manage_item">
-
-        <argument
-            android:name="itemId"
-            app:argType="integer" />
-
-    </fragment>
-
-    <!-- ITEM: Detail  -->
-    <fragment
-        android:id="@+id/detailFragment"
-        android:name="com.team.bossku.ui.detail.DetailFragment"
-        android:label="fragment_detail"
-        tools:layout="@layout/fragment_detail">
 
         <argument
             android:name="itemId"
@@ -133,7 +117,7 @@
 
     </fragment>
 
-    <!-- TICKET -->
+    <!-- TICKET (detail or in-progress) -->
     <fragment
         android:id="@+id/ticketFragment"
         android:name="com.team.bossku.ui.ticket.TicketFragment"
@@ -145,7 +129,8 @@
             app:argType="integer"
             android:defaultValue="-1" />
 
-        <action android:id="@+id/action_ticket_to_history"
+        <action
+            android:id="@+id/action_ticket_to_history"
             app:destination="@id/historyFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
@@ -154,17 +139,116 @@
 
     </fragment>
 
-    <!-- HISTORY -->
+    <!-- HISTORY: detail -->
     <fragment
         android:id="@+id/historyFragment"
         android:name="com.team.bossku.ui.history.HistoryFragment"
         android:label="fragment_history"
-        tools:layout="@layout/fragment_history" />
+        tools:layout="@layout/fragment_history">
+
+        <argument
+            android:name="ticketId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+
+    </fragment>
 
     <!-- SETTINGS -->
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.team.bossku.ui.settings.SettingsFragment"
         android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings">
+
+        <action
+            android:id="@+id/action_settingsFragment_to_itemListFragment"
+            app:destination="@id/itemListFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+
+        <action
+            android:id="@+id/action_settingsFragment_to_categoryListFragment"
+            app:destination="@id/categoryListFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+
+        <action
+            android:id="@+id/action_settingsFragment_to_historyListFragment"
+            app:destination="@id/historyListFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+
+    </fragment>
+
+    <!-- LISTS -->
+    <fragment
+        android:id="@+id/itemListFragment"
+        android:name="com.team.bossku.ui.list.ItemListFragment"
+        android:label="fragment_item_list"
+        tools:layout="@layout/fragment_base_manage_list">
+
+        <action
+            android:id="@+id/action_itemListFragment_to_addItemFragment"
+            app:destination="@id/addItemFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+
+        <action
+            android:id="@+id/action_itemListFragment_to_editItemFragment"
+            app:destination="@id/editItemFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/categoryListFragment"
+        android:name="com.team.bossku.ui.list.CategoryListFragment"
+        android:label="fragment_category_list"
+        tools:layout="@layout/fragment_base_manage_list">
+
+        <action
+            android:id="@+id/action_categoryListFragment_to_addCategoryFragment"
+            app:destination="@id/addCategoryFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+
+        <action
+            android:id="@+id/action_categoryListFragment_to_editCategoryFragment"
+            app:destination="@id/editCategoryFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/historyListFragment"
+        android:name="com.team.bossku.ui.list.HistoryListFragment"
+        android:label="fragment_history_list"
+        tools:layout="@layout/fragment_base_manage_list">
+
+        <action
+            android:id="@+id/action_historyListFragment_to_historyFragment"
+            app:destination="@id/historyFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+
+    </fragment>
+
 </navigation>

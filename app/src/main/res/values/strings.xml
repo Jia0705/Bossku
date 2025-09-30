@@ -22,6 +22,7 @@
     <string name="added_ticket">Added to Ticket</string>
     <string name="empty_item">You have no item yet</string>
     <string name="empty_category">You have no category yet</string>
+    <string name="empty_history">No history yet</string>
     <string name="no_category">No Category</string>
     <string name="items">Items</string>
     <string name="categories">Categories</string>
@@ -33,4 +34,7 @@
     <string name="history">History</string>
     <string name="light">Light</string>
     <string name="dark">Dark</string>
+    <string name="empty">Empty</string>
+    <string name="header">Header</string>
+    <string name="delete">Delete</string>
 </resources>
