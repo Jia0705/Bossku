@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cvTicket"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/xs"
+    app:cardCornerRadius="@dimen/s"
+    app:cardElevation="@dimen/s">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clTicket"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/xs">
+
+        <!-- Ticket ID  -->
+        <TextView
+            android:id="@+id/tvTicketId"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/ticketid"
+            android:textStyle="bold"
+            android:textSize="@dimen/tx_xxl"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Time -->
+        <TextView
+            android:id="@+id/tvTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/xxs"
+            android:text="@string/date_time"
+            android:textSize="@dimen/tx_l"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTicketId"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <!-- Total Price -->
+        <TextView
+            android:id="@+id/tvTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/total"
+            android:textSize="@dimen/tx_xl"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvTicketId"
+            app:layout_constraintBottom_toBottomOf="@id/tvTime" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

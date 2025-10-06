@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".ui.manage.base.BaseManageItemFragment">
+
+    <!-- HEADER -->
+    <LinearLayout
+        android:id="@+id/llHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/m"
+        android:paddingEnd="@dimen/m"
+        android:paddingTop="@dimen/xl"
+        android:paddingBottom="@dimen/s">
+
+        <ImageButton
+            android:id="@+id/ibBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/l"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="?attr/colorOnSurface"
+            android:src="@drawable/ic_back" />
+
+        <TextView
+            android:id="@+id/tvHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/xxl"
+            android:paddingStart="@dimen/xl"
+            android:text="@string/add_new_item"
+            android:textStyle="bold"
+            style="@style/TextAppearance.Material3.TitleLarge" />
+
+    </LinearLayout>
+
+    <!-- FORM -->
+    <LinearLayout
+        android:id="@+id/formContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/l"
+        android:paddingTop="@dimen/m"
+        android:paddingEnd="@dimen/l">
+
+        <!-- NAME -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tfName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/m"
+            android:hint="@string/name"
+            android:padding="@dimen/s">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLength="45"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- CATEGORY -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tfCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/m"
+            android:hint="@string/category"
+            app:endIconMode="dropdown_menu"
+            android:padding="@dimen/s">
+
+            <AutoCompleteTextView
+                android:id="@+id/acCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:maxLines="1"
+                android:paddingStart="@dimen/m"
+                android:paddingTop="@dimen/s"
+                android:paddingEnd="@dimen/m"
+                android:paddingBottom="@dimen/s"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- PRICE  -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/m"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tfPrice"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/price"
+                android:padding="@dimen/s">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:maxLength="10"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Space
+                android:layout_width="@dimen/m"
+                android:layout_height="wrap_content" />
+
+            <!-- COST -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tfCost"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/cost"
+                android:padding="@dimen/s">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etCost"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:maxLength="10"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <!-- ID -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/m"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tfId"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/id"
+                android:padding="@dimen/s"
+                android:enabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Space
+                android:layout_width="@dimen/m"
+                android:layout_height="wrap_content" />
+
+            <!-- BARCODE -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tfBarcode"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/barcode"
+                android:padding="@dimen/s">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etBarcode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:maxLength="20"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/color"
+            android:layout_marginTop="@dimen/xxxxxl"
+            android:paddingStart="@dimen/l"
+            style="@style/TextAppearance.Material3.TitleMedium"/>
+
+        <!-- COLORS -->
+        <LinearLayout
+            android:id="@+id/colorContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/xl"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/s">
+
+            <View
+                android:id="@+id/c1"
+                android:layout_width="@dimen/xxxxxl"
+                android:layout_height="@dimen/xxxxxl"
+                android:background="@color/red" />
+
+            <Space
+                android:layout_width="@dimen/xxxl"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:id="@+id/c2"
+                android:layout_width="@dimen/xxxxxl"
+                android:layout_height="@dimen/xxxxxl"
+                android:background="@color/orange" />
+
+            <Space
+                android:layout_width="@dimen/xxxl"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:id="@+id/c3"
+                android:layout_width="@dimen/xxxxxl"
+                android:layout_height="@dimen/xxxxxl"
+                android:background="@color/yellow" />
+
+            <Space
+                android:layout_width="@dimen/xxxl"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:id="@+id/c4"
+                android:layout_width="@dimen/xxxxxl"
+                android:layout_height="@dimen/xxxxxl"
+                android:background="@color/green" />
+
+            <Space
+                android:layout_width="@dimen/xxxl"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:id="@+id/c5"
+                android:layout_width="@dimen/xxxxxl"
+                android:layout_height="@dimen/xxxxxl"
+                android:background="@color/blue" />
+
+        </LinearLayout>
+
+        <!-- Save + Delete -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/xxxxl"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <!-- SAVE -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/mbSave"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/save"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/blue" />
+
+            <Space
+                android:layout_width="@dimen/m"
+                android:layout_height="wrap_content" />
+
+            <!-- DELETE -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/mbDelete"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/delete"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/red" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

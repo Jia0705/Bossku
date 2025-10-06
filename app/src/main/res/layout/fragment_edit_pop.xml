@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="@dimen/xxl"
+    tools:context=".ui.popup.EditPopFragment">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/white"
+            android:padding="@dimen/xxl">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/quantity"
+                android:textSize="@dimen/tx_xxxl"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:padding="@dimen/xs"/>
+
+            <EditText
+                android:id="@+id/etQty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/xxl"
+                android:hint="@string/enter_quantity"
+                android:textColor="@color/black"
+                android:inputType="number"
+                android:maxLines="1"
+                android:layout_marginTop="@dimen/xxxl"
+                android:layout_marginBottom="@dimen/xxxl"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/mbSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/save"
+                android:textSize="@dimen/tx_xl"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                app:cornerRadius="@dimen/m"
+                android:paddingVertical="@dimen/m"
+                android:paddingHorizontal="@dimen/xxxxxl"
+                app:backgroundTint="@color/blue"/>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+</LinearLayout>
