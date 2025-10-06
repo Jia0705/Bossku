@@ -1,6 +1,7 @@
 package com.team.bossku.ui.ticket_detail
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,7 @@ class TicketDetailFragment : Fragment() {
     private val viewModel: TicketDetailViewModel by viewModels()
     private val args: TicketDetailFragmentArgs by navArgs()
     private lateinit var adapter: TicketsDetailsAdapter
+    private var backTimer: CountDownTimer? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,7 +40,7 @@ class TicketDetailFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.ticket.collect { ticket ->
                 if (ticket != null) {
-                    binding.tvHeader.text = "Ticket ${ticket.id ?: "-"}"
+                    binding.tvHeader.text = ticket.name
                     binding.tvTotal.text = "RM %.2f".format(ticket.total)
                     adapter.setDetails(ticket.items)
 
@@ -55,6 +57,16 @@ class TicketDetailFragment : Fragment() {
 
         binding.mbSave.setOnClickListener {
             viewModel.markAsPaid()
+
+            backTimer?.cancel()
+            backTimer = object : CountDownTimer(10_000, 1_000) {
+                override fun onTick(millisUntilFinished: Long) { }
+                override fun onFinish() {
+                    if (isAdded) {
+                        findNavController().popBackStack()
+                    }
+                }
+            }.start()
         }
         viewModel.loadTicket(args.ticketId)
     }
@@ -65,7 +77,7 @@ class TicketDetailFragment : Fragment() {
             { position, detail ->
                 val ticket = viewModel.ticket.value
                 if (ticket != null && ticket.status != TicketStatus.PAID) {
-                    val dialog = EditPopFragment()
+                    val dialog = EditPopFragment(oldQty = detail.qty)
                     dialog.setListener(object : EditPopFragment.Listener {
                         override fun onClickSave(newQty: Int) {
                             viewModel.updateQuantity(position, newQty)
@@ -85,5 +97,10 @@ class TicketDetailFragment : Fragment() {
         binding.ibBack.setOnClickListener { findNavController().popBackStack() }
         binding.rvDetails.layoutManager = LinearLayoutManager(requireContext())
         binding.rvDetails.adapter = adapter
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        backTimer?.cancel()
     }
 }

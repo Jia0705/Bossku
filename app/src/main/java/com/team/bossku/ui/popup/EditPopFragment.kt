@@ -29,7 +29,7 @@ class EditPopFragment(
         val etQty = view.findViewById<EditText>(R.id.etQty)
         val btnSave = view.findViewById<MaterialButton>(R.id.mbSave)
 
-        etQty.setText(oldQty.toString())
+        etQty.setText(oldQty?.toString() ?: "")
 
         val dialog = AlertDialog.Builder(requireContext()).setView(view).create()
 

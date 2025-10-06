@@ -200,8 +200,12 @@ class HomeFragment : Fragment() {
         val dialog = SavePopFragment()
         dialog.setListener(object : SavePopFragment.Listener {
             override fun onClickSave(name: String) {
-                val args = Bundle().apply { putString("ticket_name", name) }
-                findNavController().navigate(R.id.ticketFragment, args)
+                val created = viewModel.saveCartAsTicket(name)
+                if (created) {
+                    findNavController().navigate(R.id.ticketFragment)
+                } else {
+                    Toast.makeText(requireContext(), getString(R.string.empty), Toast.LENGTH_LONG).show()
+                }
             }
         })
         dialog.show(parentFragmentManager, "save_ticket")

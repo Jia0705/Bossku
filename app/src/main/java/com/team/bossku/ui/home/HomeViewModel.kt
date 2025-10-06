@@ -3,9 +3,12 @@ package com.team.bossku.ui.home
 import androidx.lifecycle.ViewModel
 import com.team.bossku.data.model.Category
 import com.team.bossku.data.model.Item
+import com.team.bossku.data.model.Ticket
+import com.team.bossku.data.model.TicketDetail
 import com.team.bossku.data.repo.CartItemsRepo
 import com.team.bossku.data.repo.CategoriesRepo
 import com.team.bossku.data.repo.ItemsRepo
+import com.team.bossku.data.repo.TicketsRepo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -15,7 +18,8 @@ enum class Mode { ITEMS, CATEGORIES }
 class HomeViewModel(
     private val itemsRepo: ItemsRepo = ItemsRepo.getInstance(),
     private val categoriesRepo: CategoriesRepo = CategoriesRepo.getInstance(),
-    private val cartItemsRepo: CartItemsRepo = CartItemsRepo.getInstance()
+    private val cartItemsRepo: CartItemsRepo = CartItemsRepo.getInstance(),
+    private val ticketsRepo: TicketsRepo = TicketsRepo.getInstance()
 ) : ViewModel() {
     private val _items = MutableStateFlow<List<Item>>(emptyList())
     private val _categories = MutableStateFlow<List<Category>>(emptyList())
@@ -106,6 +110,38 @@ class HomeViewModel(
 
     fun clearAddToTicketEvent() {
         _addToTicketItem.value = null
+    }
+
+    fun saveCartAsTicket(name: String): Boolean {
+        val details = mutableListOf<TicketDetail>()
+        val items = cartItemsRepo.getItems()
+
+        for (item in items) {
+            val itemId = item.id
+            if (itemId != null) {
+                val quantity = cartItemsRepo.getQty(itemId)
+                if (quantity > 0) {
+                    details.add(
+                        TicketDetail(
+                            id = null,
+                            itemId = itemId,
+                            name = item.name,
+                            price = item.price,
+                            qty = quantity
+                        )
+                    )
+                }
+            }
+        }
+
+        if (details.isEmpty()) {
+            return false
+        }
+
+        val ticket = Ticket(id = null, name = name, items = details)
+        ticketsRepo.addTicket(ticket)
+        cartItemsRepo.clearCart()
+        return true
     }
 
     fun selectCategory(categoryId: Int?) {
