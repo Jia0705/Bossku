@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".ui.history.HistoryFragment">
+
+    <!-- Header -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/ibBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/l"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="?attr/colorOnSurface"
+            android:src="@drawable/ic_back" />
+
+        <TextView
+            android:id="@+id/tvHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/history"
+            android:textAppearance="@style/TextAppearance.Material3.TitleLarge" />
+
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <!-- Search + Sort -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/xs">
+
+        <EditText
+            android:id="@+id/etSearch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/ic_search"
+            android:drawableTint="?attr/colorOnSurface"
+            android:drawablePadding="@dimen/xs"
+            android:hint="@string/search"
+            android:padding="@dimen/xs" />
+
+        <ImageButton
+            android:id="@+id/ibSort"
+            android:layout_width="@dimen/xxxl"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/xs"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="?attr/colorOnSurface"
+            android:padding="@dimen/xxs"
+            android:src="@drawable/ic_sort" />
+
+    </LinearLayout>
+
+    <!-- Content -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvHistory"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/xs"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/xxxxl" />
+
+        <LinearLayout
+            android:id="@+id/llEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/xl">
+
+            <ImageView
+                android:layout_width="@dimen/xxxxl"
+                android:layout_height="@dimen/xxxxl"
+                android:layout_marginBottom="@dimen/xs"
+                app:tint="?attr/colorOnSurface"
+                android:src="@drawable/ic_question" />
+
+            <TextView
+                android:id="@+id/tvEmpty"
+                style="@style/TextAppearance.Material3.TitleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/empty_history" />
+
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

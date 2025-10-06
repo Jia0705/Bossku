@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="@dimen/xxl"
+    tools:context=".ui.popup.SortPopFragment">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/white"
+            android:padding="@dimen/xs">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/sort"
+                android:textSize="@dimen/tx_xxxxl"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:padding="@dimen/xs"/>
+
+            <RadioGroup
+                android:id="@+id/rgSort"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rbAsc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/asc"
+                    android:textSize="@dimen/tx_xxl"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"/>
+
+                <RadioButton
+                    android:id="@+id/rbDes"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/des"
+                    android:textSize="@dimen/tx_xxl"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"/>
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/sort_by"
+                android:textSize="@dimen/tx_xxxxl"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:padding="@dimen/xs"
+                android:layout_marginTop="@dimen/xxxl"/>
+
+            <RadioGroup
+                android:id="@+id/rgSortBy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rbTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/name"
+                    android:textSize="@dimen/tx_xxl"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"/>
+
+                <RadioButton
+                    android:id="@+id/rbDatetime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/date_time"
+                    android:textSize="@dimen/tx_xxl"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"/>
+            </RadioGroup>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/mbDone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/done"
+                android:textSize="@dimen/tx_xl"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/xxxxxl"
+                app:cornerRadius="@dimen/m"
+                android:paddingVertical="@dimen/m"
+                android:paddingHorizontal="@dimen/xxxxxl"
+                app:backgroundTint="@color/blue"/>
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>
+
+
