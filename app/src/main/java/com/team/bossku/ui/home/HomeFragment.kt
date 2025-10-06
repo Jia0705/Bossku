@@ -15,9 +15,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.team.bossku.R
+import com.team.bossku.data.repo.CartItemsRepo
 import com.team.bossku.databinding.FragmentHomeBinding
 import com.team.bossku.ui.adapter.CategoriesAdapter
 import com.team.bossku.ui.adapter.ItemsAdapter
+import com.team.bossku.ui.popup.SavePopFragment
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
@@ -58,7 +60,13 @@ class HomeFragment : Fragment() {
 
         // Ticket
         binding.ibCart.setOnClickListener {
-            findNavController().navigate(R.id.ticketFragment)
+            val cartEmpty = CartItemsRepo.getInstance().isEmpty()
+            if (cartEmpty) {
+                // No items in cart, go to Ticket screen
+                findNavController().navigate(R.id.ticketFragment)
+            } else {
+                showSaveTicketDialog()
+            }
         }
 
         // Add item / Category
@@ -132,7 +140,7 @@ class HomeFragment : Fragment() {
         }
 
         categoriesAdapter = CategoriesAdapter(emptyList()) { cat ->
-            Toast.makeText(requireContext(), cat.name, Toast.LENGTH_LONG).show()
+            viewModel.selectCategory(cat.id)
         }
 
         val layoutManager = GridLayoutManager(requireContext(), 2)
@@ -168,8 +176,14 @@ class HomeFragment : Fragment() {
     // Update text in different mode
     private fun updateTexts() {
         val itemsMode = viewModel.mode.value == Mode.ITEMS
+        val selectedCatName = viewModel.getSelectedCategoryName()
+
         // header
-        binding.tvHeader.text = if (itemsMode) getString(R.string.items) else getString(R.string.categories)
+        binding.tvHeader.text = if (itemsMode) {
+            selectedCatName ?: getString(R.string.items)
+        } else {
+            getString(R.string.categories)
+        }
         // add button
         binding.fabAdd.text = if (itemsMode) getString(R.string.add_new_item) else getString(R.string.add_new_category)
         // empty view
@@ -180,5 +194,16 @@ class HomeFragment : Fragment() {
         val empty = viewModel.isEmpty.value
         binding.llEmpty.visibility = if (empty) View.VISIBLE else View.GONE
         binding.rvItems.visibility = if (empty) View.GONE else View.VISIBLE
+    }
+
+    private fun showSaveTicketDialog() {
+        val dialog = SavePopFragment()
+        dialog.setListener(object : SavePopFragment.Listener {
+            override fun onClickSave(name: String) {
+                val args = Bundle().apply { putString("ticket_name", name) }
+                findNavController().navigate(R.id.ticketFragment, args)
+            }
+        })
+        dialog.show(parentFragmentManager, "save_ticket")
     }
 }

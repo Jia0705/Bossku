@@ -6,10 +6,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.team.bossku.data.model.TicketDetail
 import com.team.bossku.databinding.ItemLayoutTicketDetailBinding
 
-class DetailsAdapter(
-    private val ticketDetails: MutableList<TicketDetail> = mutableListOf(),
-    private val onClick: (TicketDetail) -> Unit
-) : RecyclerView.Adapter<DetailsAdapter.DetailViewHolder>() {
+class TicketsDetailsAdapter(
+    private var details: List<TicketDetail> = emptyList(),
+    private val onEditQty: (Int, TicketDetail) -> Unit,
+    private val onLongPressDelete: ((Int, TicketDetail) -> Unit)? = null
+) : RecyclerView.Adapter<TicketsDetailsAdapter.DetailViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailViewHolder {
         val binding = ItemLayoutTicketDetailBinding.inflate(
@@ -19,39 +20,39 @@ class DetailsAdapter(
     }
 
     override fun onBindViewHolder(holder: DetailViewHolder, position: Int) {
-        holder.bind(ticketDetails[position])
+        holder.bind(details[position], position)
     }
 
-    override fun getItemCount(): Int = ticketDetails.size
+    override fun getItemCount(): Int = details.size
 
     fun setDetails(list: List<TicketDetail>) {
-        ticketDetails.clear()
-        ticketDetails.addAll(list)
+        details = list
         notifyDataSetChanged()
-    }
-
-    fun getItemAt(position: Int): TicketDetail = ticketDetails[position]
-
-    fun removeAt(position: Int): TicketDetail {
-        val removed = ticketDetails.removeAt(position)
-        notifyItemRemoved(position)
-        return removed
-    }
-
-    fun insertAt(position: Int, item: TicketDetail) {
-        ticketDetails.add(position, item)
-        notifyItemInserted(position)
     }
 
     inner class DetailViewHolder(
         private val binding: ItemLayoutTicketDetailBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(ticketDetail: TicketDetail) {
-            binding.tvName.text = ticketDetail.name
-            binding.tvQty.text = ticketDetail.qty.toString()
-            binding.tvTotal.text = ticketDetail.total.toString()
-            binding.llDetail.setOnClickListener { onClick(ticketDetail) }
+        fun bind(detail: TicketDetail, position: Int) {
+            binding.tvName.text = detail.name
+            binding.tvQty.text = detail.qty.toString()
+            binding.tvTotal.text = "RM " + String.format("%.2f", detail.subtotal)
+
+            // Click to edit quantity
+            binding.llDetail.setOnClickListener {
+                onEditQty(position, detail)
+            }
+
+            // Long-press to delete item
+            binding.llDetail.setOnLongClickListener {
+                if (onLongPressDelete == null) {
+                    false
+                } else {
+                    onLongPressDelete(position, detail)
+                    true
+                }
+            }
         }
     }
 }

@@ -7,6 +7,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.team.bossku.R
 import com.team.bossku.ui.manage.base.BaseManageCategoryFragment
+import com.team.bossku.ui.popup.DeletePopFragment
 
 class EditCategoryFragment : BaseManageCategoryFragment() {
     override val viewModel: EditCategoryViewModel by viewModels()
@@ -41,6 +42,13 @@ class EditCategoryFragment : BaseManageCategoryFragment() {
         }
 
         binding.mbDelete.visibility = View.VISIBLE
-        binding.mbDelete.setOnClickListener { viewModel.deleteCategory() }
+        binding.mbDelete.setOnClickListener {
+            val dialog = DeletePopFragment()
+            dialog.setListener(object : DeletePopFragment.Listener {
+                override fun onClickCancel() { }
+                override fun onClickDelete() { viewModel.deleteCategory() }
+            })
+            dialog.show(parentFragmentManager, "confirm_delete_category")
+        }
     }
 }

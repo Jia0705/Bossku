@@ -3,6 +3,7 @@ package com.team.bossku.ui.home
 import androidx.lifecycle.ViewModel
 import com.team.bossku.data.model.Category
 import com.team.bossku.data.model.Item
+import com.team.bossku.data.repo.CartItemsRepo
 import com.team.bossku.data.repo.CategoriesRepo
 import com.team.bossku.data.repo.ItemsRepo
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +14,8 @@ enum class Mode { ITEMS, CATEGORIES }
 
 class HomeViewModel(
     private val itemsRepo: ItemsRepo = ItemsRepo.getInstance(),
-    private val categoriesRepo: CategoriesRepo = CategoriesRepo.getInstance()
+    private val categoriesRepo: CategoriesRepo = CategoriesRepo.getInstance(),
+    private val cartItemsRepo: CartItemsRepo = CartItemsRepo.getInstance()
 ) : ViewModel() {
     private val _items = MutableStateFlow<List<Item>>(emptyList())
     private val _categories = MutableStateFlow<List<Category>>(emptyList())
@@ -42,6 +44,8 @@ class HomeViewModel(
     private val _addToTicketItem = MutableStateFlow<Int?>(null)
     val addToTicketItem: StateFlow<Int?> = _addToTicketItem
 
+    private val _selectedCategoryId = MutableStateFlow<Int?>(null)
+
     init {
         refresh()
     }
@@ -57,6 +61,9 @@ class HomeViewModel(
     fun switchMode(newMode: Mode) {
         if (_mode.value != newMode) {
             _mode.value = newMode
+            if (newMode == Mode.ITEMS) {
+                _selectedCategoryId.value = null
+            }
             applyFilters()
         }
     }
@@ -77,37 +84,71 @@ class HomeViewModel(
     fun move(from: Int, to: Int) {
         if (_mode.value == Mode.ITEMS) {
             val list = _rvItems.value.toMutableList()
-            if (from in list.indices && to in list.indices) {
-                val moved = list.removeAt(from)
-                list.add(to, moved)
-                _rvItems.value = list
-            }
+            val item = list[from]
+            list.removeAt(from)
+            list.add(to, item)
+            _rvItems.value = list
         } else {
             val list = _rvCats.value.toMutableList()
-            if (from in list.indices && to in list.indices) {
-                val moved = list.removeAt(from)
-                list.add(to, moved)
-                _rvCats.value = list
-            }
+            val cat = list[from]
+            list.removeAt(from)
+            list.add(to, cat)
+            _rvCats.value = list
         }
     }
 
     // Click item then add to ticket
     fun addItemToTicket(id: Int) {
+        val item = itemsRepo.getItemById(id) ?: return
+        cartItemsRepo.addItem(item)
         _addToTicketItem.value = id
     }
+
     fun clearAddToTicketEvent() {
         _addToTicketItem.value = null
+    }
+
+    fun selectCategory(categoryId: Int?) {
+        _selectedCategoryId.value = categoryId
+        _mode.value = Mode.ITEMS
+        applyFilters()
+    }
+
+    // Check selected category name
+    fun getSelectedCategoryName(): String? {
+        val id = _selectedCategoryId.value
+        if (id == null) {
+            return null
+        }
+
+        for (category in _categories.value) {
+            if (category.id == id) {
+                return category.name
+            }
+        }
+        return null
     }
 
     // SEARCH + SORT
     private fun applyFilters() {
         val search = _search.value.trim().lowercase()
         val sort = _sort.value
+        val categoryId = _selectedCategoryId.value
 
-        // Items: filter by name, then sort
-        val itemsFiltered = if (search.isEmpty()) _items.value
-        else _items.value.filter { it.name.lowercase().contains(search) }
+        // Items: filter by category, then by name, then sort
+        var itemsFiltered = _items.value
+
+        itemsFiltered = when (categoryId) {
+            null -> itemsFiltered
+            else -> itemsFiltered.filter { it.categoryId == categoryId }
+        }
+
+        // Search
+        if (search.isNotEmpty()) {
+            itemsFiltered = itemsFiltered.filter { it.name.lowercase().contains(search) }
+        }
+
+        // Sort
         _rvItems.value = if (sort)
             itemsFiltered.sortedBy { it.name.lowercase() }
         else

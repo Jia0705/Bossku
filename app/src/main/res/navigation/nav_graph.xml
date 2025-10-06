@@ -130,6 +130,14 @@
             android:defaultValue="-1" />
 
         <action
+            android:id="@+id/action_ticketFragment_to_ticketDetailFragment"
+            app:destination="@id/ticketDetailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+
+        <action
             android:id="@+id/action_ticket_to_history"
             app:destination="@id/historyFragment"
             app:enterAnim="@anim/from_right"
@@ -139,7 +147,20 @@
 
     </fragment>
 
-    <!-- HISTORY: detail -->
+    <!-- TICKET DETAIL -->
+    <fragment
+        android:id="@+id/ticketDetailFragment"
+        android:name="com.team.bossku.ui.ticket_detail.TicketDetailFragment"
+        android:label="fragment_ticket_detail"
+        tools:layout="@layout/fragment_ticket_detail">
+
+        <argument
+            android:name="ticketId"
+            app:argType="integer" />
+
+    </fragment>
+
+    <!-- HISTORY -->
     <fragment
         android:id="@+id/historyFragment"
         android:name="com.team.bossku.ui.history.HistoryFragment"
@@ -150,6 +171,26 @@
             android:name="ticketId"
             app:argType="integer"
             android:defaultValue="-1" />
+
+        <action
+            android:id="@+id/action_historyFragment_to_historyDetailFragment"
+            app:destination="@id/historyDetailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/historyDetailFragment"
+        android:name="com.team.bossku.ui.history.HistoryDetailFragment"
+        android:label="fragment_history_detail"
+        tools:layout="@layout/fragment_ticket_detail">
+
+        <argument
+            android:name="ticketId"
+            app:argType="integer" />
 
     </fragment>
 
@@ -177,8 +218,8 @@
             app:popExitAnim="@anim/to_right" />
 
         <action
-            android:id="@+id/action_settingsFragment_to_historyListFragment"
-            app:destination="@id/historyListFragment"
+            android:id="@+id/action_settingsFragment_to_historyFragment"
+            app:destination="@id/historyFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
@@ -235,6 +276,7 @@
 
     </fragment>
 
+    <!-- HISTORY LIST -->
     <fragment
         android:id="@+id/historyListFragment"
         android:name="com.team.bossku.ui.list.HistoryListFragment"
@@ -242,8 +284,8 @@
         tools:layout="@layout/fragment_base_manage_list">
 
         <action
-            android:id="@+id/action_historyListFragment_to_historyFragment"
-            app:destination="@id/historyFragment"
+            android:id="@+id/action_historyListFragment_to_historyDetailFragment"
+            app:destination="@id/historyDetailFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"

@@ -55,7 +55,7 @@ class HistoryListFragment : BaseManageListFragment() {
         adapter = TicketsAdapter(emptyList()) { ticket ->
             val id = ticket.id
             if (id != null) {
-                val action = HistoryListFragmentDirections.actionHistoryListFragmentToHistoryFragment(id)
+                val action = HistoryListFragmentDirections.actionHistoryListFragmentToHistoryDetailFragment(id)
                 findNavController().navigate(action)
             }
         }

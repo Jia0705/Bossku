@@ -23,6 +23,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/l"
                 android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="?attr/colorOnSurface"
                 android:src="@drawable/ic_back" />
 
             <TextView
@@ -48,6 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:drawableStart="@drawable/ic_search"
+                android:drawableTint="?attr/colorOnSurface"
                 android:drawablePadding="@dimen/xs"
                 android:hint="@string/search"
                 android:padding="@dimen/xs" />
@@ -59,6 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/xs"
                 android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="?attr/colorOnSurface"
                 android:padding="@dimen/xxs"
                 android:src="@drawable/ic_sort" />
 
@@ -89,6 +92,7 @@
                     android:layout_width="@dimen/xxxxl"
                     android:layout_height="@dimen/xxxxl"
                     android:layout_marginBottom="@dimen/xs"
+                    app:tint="?attr/colorOnSurface"
                     android:src="@drawable/ic_question" />
 
                 <TextView
@@ -114,7 +118,7 @@
         android:text="@string/add_new"
         android:textColor="@color/white"
         app:icon="@drawable/ic_add"
-        app:iconTint="?attr/colorOnPrimary"
+        app:iconTint="@color/white"
         tools:visibility="visible" />
 
 </FrameLayout>

@@ -9,11 +9,15 @@
     <string name="barcode">Barcode</string>
     <string name="color">Color</string>
     <string name="save">Save</string>
-    <string name="ticketid">TicketId</string>
-    <string name="time">Time</string>
+    <string name="ticketid">Ticket ID</string>
+    <string name="ticket_name">Ticket Name</string>
+    <string name="enter_ticket_name">Enter Ticket Name</string>
+    <string name="date_time">DateTime</string>
     <string name="total">Total</string>
     <string name="quantity">Quantity</string>
     <string name="search">Search</string>
+    <string name="sort">Sort</string>
+    <string name="sort_by">Sort By</string>
     <string name="add_new">Add New</string>
     <string name="add_new_item">Add New Item</string>
     <string name="add_new_category">Add New Category</string>
@@ -22,8 +26,9 @@
     <string name="added_ticket">Added to Ticket</string>
     <string name="empty_item">You have no item yet</string>
     <string name="empty_category">You have no category yet</string>
-    <string name="empty_history">No history yet</string>
+    <string name="empty_history">No history available</string>
     <string name="no_category">No Category</string>
+    <string name="no_ticket_here">No ticket here</string>
     <string name="items">Items</string>
     <string name="categories">Categories</string>
     <string name="asc">Ascending</string>
@@ -32,9 +37,18 @@
     <string name="theme">Theme</string>
     <string name="language">Language</string>
     <string name="history">History</string>
+    <string name="ticket_list">Ticket List</string>
+    <string name="ticket_detail">Ticket Detail</string>
     <string name="light">Light</string>
     <string name="dark">Dark</string>
     <string name="empty">Empty</string>
     <string name="header">Header</string>
     <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="are_you_sure">Are you sure</string>
+    <string name="you_want_to_delete_it">You want to delete it?</string>
+    <string name="action_cannot_be_undone">Action cannot be undone</string>
+    <string name="done">Done</string>
+    <string name="tvtotal">Total:</string>
+    <string name="enter_quantity">Enter Quantity</string>
 </resources>

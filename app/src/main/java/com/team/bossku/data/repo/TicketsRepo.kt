@@ -1,6 +1,7 @@
 package com.team.bossku.data.repo
 
 import com.team.bossku.data.model.Ticket
+import com.team.bossku.data.model.TicketStatus
 
 class TicketsRepo private constructor() {
     val map = mutableMapOf<Int, Ticket>()
@@ -19,6 +20,16 @@ class TicketsRepo private constructor() {
 
     fun updateTicket(id: Int, ticket: Ticket) {
         map[id] = ticket.copy(id = id)
+    }
+
+    fun markAsPaid(id: Int) {
+        val ticket = map[id] ?: return
+        if (ticket.status == TicketStatus.SAVED) {
+            map[id] = ticket.copy(
+                status = TicketStatus.PAID,
+                paidAt = System.currentTimeMillis()
+            )
+        }
     }
 
     fun deleteTicket(id: Int) {

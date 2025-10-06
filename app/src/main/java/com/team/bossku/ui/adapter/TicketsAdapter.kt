@@ -4,11 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.team.bossku.data.model.Ticket
+import com.team.bossku.data.model.TicketStatus
 import com.team.bossku.databinding.ItemLayoutTicketBinding
+import java.text.DateFormat
 import java.util.Date
 
 class TicketsAdapter(
     private var tickets: List<Ticket> = emptyList(),
+    private val onLongClick: ((Ticket) -> Unit)? = null,
     private val onClick: (Ticket) -> Unit
 ) : RecyclerView.Adapter<TicketsAdapter.TicketViewHolder>() {
 
@@ -35,10 +38,23 @@ class TicketsAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(ticket: Ticket) {
-            binding.tvTicketId.text = "Ticket ${ticket.id ?: "-"}"    // Ticket 1, Ticket 2
-            binding.tvTime.text = Date(ticket.createdAt).toString()
-            binding.tvTotal.text = ticket.total.toString()
+            binding.tvTicketId.text = ticket.name
+            binding.tvTime.text = if (ticket.status == TicketStatus.PAID && ticket.paidAt != null) {
+                DateFormat.getDateTimeInstance().format(Date(ticket.paidAt))
+            } else {
+                DateFormat.getDateTimeInstance().format(Date(ticket.createdAt))
+            }
+            binding.tvTotal.text = "RM " + String.format("%.2f", ticket.total)
             binding.clTicket.setOnClickListener { onClick(ticket) }
+
+            binding.clTicket.setOnLongClickListener {
+                if (onLongClick != null) {
+                    onLongClick(ticket)
+                    true
+                } else {
+                    false
+                }
+            }
         }
     }
 }

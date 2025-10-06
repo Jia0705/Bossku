@@ -11,6 +11,7 @@ import com.team.bossku.R
 import com.team.bossku.data.model.Item
 import com.team.bossku.data.repo.CategoriesRepo
 import com.team.bossku.ui.manage.base.BaseManageItemFragment
+import com.team.bossku.ui.popup.DeletePopFragment
 
 class EditItemFragment : BaseManageItemFragment() {
     override val viewModel: EditItemViewModel by viewModels()
@@ -24,7 +25,14 @@ class EditItemFragment : BaseManageItemFragment() {
         binding.ibBack.setOnClickListener { findNavController().popBackStack() }
         binding.mbSave.setOnClickListener { saveItem() }
         binding.mbDelete.visibility = View.VISIBLE
-        binding.mbDelete.setOnClickListener { viewModel.deleteItem() }
+        binding.mbDelete.setOnClickListener {
+            val dialog = DeletePopFragment()
+            dialog.setListener(object : DeletePopFragment.Listener {
+                override fun onClickCancel() { }
+                override fun onClickDelete() { viewModel.deleteItem() }
+            })
+            dialog.show(parentFragmentManager, "confirm_delete_item")
+        }
 
         // Load item by id
         viewModel.loadItemById(args.itemId)

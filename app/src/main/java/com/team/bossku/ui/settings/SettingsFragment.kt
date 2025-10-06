@@ -36,7 +36,7 @@ class SettingsFragment : Fragment() {
         }
 
         binding.llHistory.setOnClickListener {
-            findNavController().navigate(R.id.action_settingsFragment_to_historyListFragment)
+            findNavController().navigate(R.id.action_settingsFragment_to_historyFragment)
         }
 
         // Language

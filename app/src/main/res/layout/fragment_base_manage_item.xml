@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".ui.manage.base.BaseManageItemFragment">
 
@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/l"
             android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="?attr/colorOnSurface"
             android:src="@drawable/ic_back" />
 
         <TextView

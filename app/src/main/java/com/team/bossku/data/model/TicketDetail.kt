@@ -7,5 +7,5 @@ data class TicketDetail(
     val price: Double,
     val qty: Int
 ) {
-    val total: Double get() = price * qty
+    val subtotal: Double get() = price * qty
 }

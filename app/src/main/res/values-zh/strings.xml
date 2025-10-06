@@ -10,10 +10,14 @@
     <string name="color">颜色</string>
     <string name="save">保存</string>
     <string name="ticketid">小票编号</string>
-    <string name="time">时间</string>
+    <string name="ticket_name">小票名称</string>
+    <string name="enter_ticket_name">请输入小票名称</string>
+    <string name="date_time">日期时间</string>
     <string name="total">总计</string>
     <string name="quantity">数量</string>
     <string name="search">搜索</string>
+    <string name="sort">排序</string>
+    <string name="sort_by">排序方式</string>
     <string name="add_new">新增</string>
     <string name="add_new_item">新增商品</string>
     <string name="add_new_category">新增分类</string>
@@ -24,6 +28,7 @@
     <string name="empty_category">当前没有分类</string>
     <string name="empty_history">暂无历史记录</string>
     <string name="no_category">无分类</string>
+    <string name="no_ticket_here">暂无小票</string>
     <string name="items">商品</string>
     <string name="categories">分类</string>
     <string name="asc">升序</string>
@@ -32,9 +37,18 @@
     <string name="theme">主题</string>
     <string name="language">语言</string>
     <string name="history">历史记录</string>
+    <string name="ticket_list">小票列表</string>
+    <string name="ticket_detail">小票详情</string>
     <string name="light">浅色</string>
     <string name="dark">深色</string>
     <string name="empty">空</string>
     <string name="header">标题</string>
     <string name="delete">删除</string>
+    <string name="cancel">取消</string>
+    <string name="are_you_sure">你确定</string>
+    <string name="you_want_to_delete_it">你要删除它吗？</string>
+    <string name="action_cannot_be_undone">此操作无法撤销</string>
+    <string name="done">完成</string>
+    <string name="tvtotal">总计:</string>
+    <string name="enter_quantity">请输入数量</string>
 </resources>
