@@ -1,49 +1,41 @@
 package com.team.bossku.data.repo
 
+import com.team.bossku.data.db.TicketsDao
 import com.team.bossku.data.model.Ticket
 import com.team.bossku.data.model.TicketStatus
+import kotlinx.coroutines.flow.Flow
 
-class TicketsRepo private constructor() {
-    val map = mutableMapOf<Int, Ticket>()
-    var counter = 0
-
-    fun addTicket(ticket: Ticket) {
-        counter = counter + 1
-        map[counter] = ticket.copy(id = counter)
+class TicketsRepo(
+    private val dao: TicketsDao
+) {
+    suspend fun addTicket(ticket: Ticket) {
+        dao.addTicket(ticket)
     }
 
-    fun getTicketById(id: Int): Ticket? {
-        return map[id]
+    suspend fun getTicketById(id: Int): Ticket? {
+        return dao.getTicketById(id)
     }
 
-    fun getTickets() = map.values.toList()
-
-    fun updateTicket(id: Int, ticket: Ticket) {
-        map[id] = ticket.copy(id = id)
+    fun getTickets(): Flow<List<Ticket>> {
+        return dao.getAllTickets()
     }
 
-    fun markAsPaid(id: Int) {
-        val ticket = map[id] ?: return
+    suspend fun updateTicket(ticket: Ticket) {
+        dao.updateTicket(ticket)
+    }
+
+    suspend fun markAsPaid(id: Int) {
+        val ticket = dao.getTicketById(id) ?: return
         if (ticket.status == TicketStatus.SAVED) {
-            map[id] = ticket.copy(
+            val updatedTicket = ticket.copy(
                 status = TicketStatus.PAID,
                 paidAt = System.currentTimeMillis()
             )
+            dao.updateTicket(updatedTicket)
         }
     }
 
-    fun deleteTicket(id: Int) {
-        map.remove(id)
-    }
-
-    companion object {
-        private var instance: TicketsRepo? = null
-
-        fun getInstance(): TicketsRepo {
-            if (instance == null) {
-                instance = TicketsRepo()
-            }
-            return instance!!
-        }
+    suspend fun deleteTicket(id: Int) {
+        dao.deleteTicket(id)
     }
 }
