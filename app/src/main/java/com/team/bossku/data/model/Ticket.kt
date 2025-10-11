@@ -10,7 +10,8 @@ data class Ticket(
     val name: String,
     val createdAt: Long = System.currentTimeMillis(),
     val paidAt: Long?= null,
-    val status: TicketStatus = TicketStatus.SAVED
+    val status: TicketStatus = TicketStatus.SAVED,
+    val total: Double
 )
 
 enum class TicketStatus { SAVED, PAID }

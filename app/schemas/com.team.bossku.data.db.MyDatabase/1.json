@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "4bf6f76c195c5d3750d5b9f016aedfe6",
+    "identityHash": "9f755f4adaf2cd56b73f03a206f59f68",
     "entities": [
       {
         "tableName": "Item",
@@ -110,7 +110,7 @@
       },
       {
         "tableName": "Ticket",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, `paidAt` INTEGER, `status` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, `paidAt` INTEGER, `status` TEXT NOT NULL, `total` REAL NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -138,6 +138,12 @@
             "fieldPath": "status",
             "columnName": "status",
             "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "total",
+            "columnName": "total",
+            "affinity": "REAL",
             "notNull": true
           }
         ],
@@ -222,7 +228,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4bf6f76c195c5d3750d5b9f016aedfe6')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9f755f4adaf2cd56b73f03a206f59f68')"
     ]
   }
 }
