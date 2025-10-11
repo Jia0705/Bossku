@@ -24,9 +24,12 @@ class MyApp: Application() {
             MyDatabase::class.java,
             MyDatabase.NAME
         )
-//            .fallbackToDestructiveMigration()
+            // .fallbackToDestructiveMigration()
             .build()
 
-        //
+        itemsRepo = ItemsRepo(db.itemsDao())
+        categoriesRepo = CategoriesRepo(db.categoriesDao())
+        cartItemsRepo = CartItemsRepo(db.ticketDetailsDao())
+        ticketsRepo = TicketsRepo(db.ticketsDao())
     }
 }
