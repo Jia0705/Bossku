@@ -1,67 +1,106 @@
 package com.team.bossku.ui.home
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.team.bossku.MyApp
+import com.team.bossku.data.ds.Grid
 import com.team.bossku.data.model.Category
 import com.team.bossku.data.model.Item
 import com.team.bossku.data.model.Ticket
 import com.team.bossku.data.model.TicketDetail
-import com.team.bossku.data.repo.CartItemsRepo
+import com.team.bossku.data.repo.TicketDetailsRepo
 import com.team.bossku.data.repo.CategoriesRepo
 import com.team.bossku.data.repo.ItemsRepo
 import com.team.bossku.data.repo.TicketsRepo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
 
-// Switch mode for Home screen
 enum class Mode { ITEMS, CATEGORIES }
 
 class HomeViewModel(
-    private val itemsRepo: ItemsRepo = ItemsRepo.getInstance(),
-    private val categoriesRepo: CategoriesRepo = CategoriesRepo.getInstance(),
-    private val cartItemsRepo: CartItemsRepo = CartItemsRepo.getInstance(),
-    private val ticketsRepo: TicketsRepo = TicketsRepo.getInstance()
+    private val itemsRepo: ItemsRepo,
+    private val categoriesRepo: CategoriesRepo,
+    private val ticketDetailsRepo: TicketDetailsRepo,
+    private val ticketsRepo: TicketsRepo,
+    private val grid: Grid
 ) : ViewModel() {
     private val _items = MutableStateFlow<List<Item>>(emptyList())
     private val _categories = MutableStateFlow<List<Category>>(emptyList())
 
-    // Mode
     private val _mode = MutableStateFlow(Mode.ITEMS)
     val mode: StateFlow<Mode> = _mode
 
-    // Search and sort (true = A to Z, false = Z to A)
     private val _search = MutableStateFlow("")
     private val _sort = MutableStateFlow(true)
     val sortAscending: StateFlow<Boolean> = _sort
 
-    // The lists the RecyclerView will display
     private val _rvItems = MutableStateFlow<List<Item>>(emptyList())
     val rvItems: StateFlow<List<Item>> = _rvItems
 
     private val _rvCats = MutableStateFlow<List<Category>>(emptyList())
     val rvCategories: StateFlow<List<Category>> = _rvCats
 
-    // Empty view
     private val _isEmpty = MutableStateFlow(true)
     val isEmpty: StateFlow<Boolean> = _isEmpty
 
-    // Add to ticket
     private val _addToTicketItem = MutableStateFlow<Int?>(null)
     val addToTicketItem: StateFlow<Int?> = _addToTicketItem
 
     private val _selectedCategoryId = MutableStateFlow<Int?>(null)
 
+    private val _manualOrder = MutableStateFlow<List<Int>>(emptyList())
+    private val _manualCatOrder = MutableStateFlow<List<Int>>(emptyList())
+
+    private var fakeTicketId: Int? = null
+
     init {
-        refresh()
+        viewModelScope.launch {
+            grid.manualOrder.collect { orderString ->
+                _manualOrder.value = if (orderString.isBlank()) emptyList()
+                else orderString.split(",").mapNotNull { it.toIntOrNull() }
+                applyFilters()
+            }
+        }
+
+        viewModelScope.launch {
+            grid.manualCategoryOrder.collect { orderString ->
+                _manualCatOrder.value = if (orderString.isBlank()) emptyList()
+                else orderString.split(",").mapNotNull { it.toIntOrNull() }
+                applyFilters()
+            }
+        }
+
+        viewModelScope.launch {
+            grid.sortAscending.collect { asc ->
+                _sort.value = asc
+                applyFilters()
+            }
+        }
+
+        viewModelScope.launch {
+            itemsRepo.getItems().collectLatest {
+                _items.value = it
+                applyFilters()
+            }
+        }
+
+        viewModelScope.launch {
+            categoriesRepo.getCategories().collectLatest {
+                _categories.value = it
+                applyFilters()
+            }
+        }
     }
 
-    // Reload everything from repos, then apply search/sort
-    fun refresh() {
-        _items.value = itemsRepo.getItems()
-        _categories.value = categoriesRepo.getCategories()
-        applyFilters()
-    }
+    fun refresh() = applyFilters()
 
-    // Switch Item / Category mode
     fun switchMode(newMode: Mode) {
         if (_mode.value != newMode) {
             _mode.value = newMode
@@ -72,77 +111,81 @@ class HomeViewModel(
         }
     }
 
-    // Search
     fun setSearch(text: String) {
         _search.value = text
         applyFilters()
     }
 
-    // Sort A to Z / Z to A
     fun setSort() {
-        _sort.value = !_sort.value
-        applyFilters()
+        viewModelScope.launch {
+            val newSort = !_sort.value
+            _sort.value = newSort
+            grid.saveSortAscending(newSort)
+            applyFilters()
+        }
     }
 
-    // Swap grid
     fun move(from: Int, to: Int) {
         if (_mode.value == Mode.ITEMS) {
             val list = _rvItems.value.toMutableList()
-            val item = list[from]
-            list.removeAt(from)
+            val item = list.removeAt(from)
             list.add(to, item)
             _rvItems.value = list
+
+            viewModelScope.launch {
+                _manualOrder.value = list.mapNotNull { it.id }
+                grid.saveManualOrder(_manualOrder.value)
+            }
         } else {
             val list = _rvCats.value.toMutableList()
-            val cat = list[from]
-            list.removeAt(from)
+            val cat = list.removeAt(from)
             list.add(to, cat)
             _rvCats.value = list
-        }
-    }
 
-    // Click item then add to ticket
-    fun addItemToTicket(id: Int) {
-        val item = itemsRepo.getItemById(id) ?: return
-        cartItemsRepo.addItem(item)
-        _addToTicketItem.value = id
-    }
-
-    fun clearAddToTicketEvent() {
-        _addToTicketItem.value = null
-    }
-
-    fun saveCartAsTicket(name: String): Boolean {
-        val details = mutableListOf<TicketDetail>()
-        val items = cartItemsRepo.getItems()
-
-        for (item in items) {
-            val itemId = item.id
-            if (itemId != null) {
-                val quantity = cartItemsRepo.getQty(itemId)
-                if (quantity > 0) {
-                    details.add(
-                        TicketDetail(
-                            id = null,
-                            itemId = itemId,
-                            name = item.name,
-                            price = item.price,
-                            qty = quantity
-                        )
-                    )
-                }
+            viewModelScope.launch {
+                _manualCatOrder.value = list.mapNotNull { it.id }
+                grid.saveManualCategoryOrder(_manualCatOrder.value)
             }
         }
+    }
 
-        if (details.isEmpty()) {
-            return false
+    private fun applyFilters() {
+        val search = _search.value.trim().lowercase()
+        val sortAsc = _sort.value
+        val categoryId = _selectedCategoryId.value
+
+        // Items
+        var filteredItems = _items.value
+        if (categoryId != null) filteredItems = filteredItems.filter { it.categoryId == categoryId }
+
+        // Search
+        if (search.isNotEmpty()) {
+            filteredItems = filteredItems.filter { it.name.lowercase().contains(search) }
         }
 
-        val ticket = Ticket(id = null, name = name, items = details)
-        ticketsRepo.addTicket(ticket)
-        cartItemsRepo.clearCart()
-        return true
+        filteredItems = if (_manualOrder.value.isNotEmpty()) {
+            val map = filteredItems.associateBy { it.id }
+            _manualOrder.value.mapNotNull { map[it] } + filteredItems.filter { it.id !in _manualOrder.value }
+        } else {
+            if (sortAsc) filteredItems.sortedBy { it.name.lowercase() } else filteredItems.sortedByDescending { it.name.lowercase() }
+        }
+        _rvItems.value = filteredItems
+
+        //  Categories
+        var filteredCats = if (search.isEmpty()) _categories.value else _categories.value.filter { it.name.lowercase().contains(search) }
+
+        filteredCats = if (_manualCatOrder.value.isNotEmpty()) {
+            val map = filteredCats.associateBy { it.id }
+            _manualCatOrder.value.mapNotNull { map[it] } + filteredCats.filter { it.id !in _manualCatOrder.value }
+        } else {
+            if (sortAsc) filteredCats.sortedBy { it.name.lowercase() } else filteredCats.sortedByDescending { it.name.lowercase() }
+        }
+        _rvCats.value = filteredCats
+
+        _isEmpty.value = if (_mode.value == Mode.ITEMS) _rvItems.value.isEmpty() else _rvCats.value.isEmpty()
     }
+
+    fun getSelectedCategoryName(): String? = _categories.value.find { it.id == _selectedCategoryId.value }?.name
 
     fun selectCategory(categoryId: Int?) {
         _selectedCategoryId.value = categoryId
@@ -150,58 +193,73 @@ class HomeViewModel(
         applyFilters()
     }
 
-    // Check selected category name
-    fun getSelectedCategoryName(): String? {
-        val id = _selectedCategoryId.value
-        if (id == null) {
-            return null
-        }
+    suspend fun addItemToCart(itemId: Int, increment: Int = 1) {
+        val item = _items.value.firstOrNull { it.id == itemId } ?: return
 
-        for (category in _categories.value) {
-            if (category.id == id) {
-                return category.name
-            }
+        if (fakeTicketId == null) {
+            val fakeTicket = Ticket(id = null, name = "Ticket", total = 0.0)
+            fakeTicketId = ticketsRepo.addTicket(fakeTicket)
         }
-        return null
+        val ticketId = fakeTicketId!!
+        val existingItems = ticketDetailsRepo.getItems(ticketId).firstOrNull() ?: emptyList()
+        val existingDetail = existingItems.firstOrNull { it.itemId == itemId }
+
+        if (existingDetail != null) {
+            val updatedDetail = existingDetail.copy(qty = existingDetail.qty + increment)
+            ticketDetailsRepo.updateItem(updatedDetail)
+        } else {
+            val detail = TicketDetail(
+                id = null,
+                ticketId = ticketId,
+                itemId = item.id!!,
+                name = item.name,
+                price = item.price,
+                qty = increment
+            )
+            ticketDetailsRepo.addItem(detail)
+        }
+        _addToTicketItem.value = itemId
     }
 
-    // SEARCH + SORT
-    private fun applyFilters() {
-        val search = _search.value.trim().lowercase()
-        val sort = _sort.value
-        val categoryId = _selectedCategoryId.value
+    fun clearAddToTicketEvent() {
+        _addToTicketItem.value = null
+    }
 
-        // Items: filter by category, then by name, then sort
-        var itemsFiltered = _items.value
+    suspend fun isCartEmpty(): Boolean {
+        val cartItems = fakeTicketId?.let { ticketDetailsRepo.getItems(it).firstOrNull() } ?: emptyList()
+        return cartItems.isEmpty()
+    }
 
-        itemsFiltered = when (categoryId) {
-            null -> itemsFiltered
-            else -> itemsFiltered.filter { it.categoryId == categoryId }
+    suspend fun saveCartAsTicket(name: String): Boolean {
+        val ticketId = fakeTicketId ?: return false
+        val cartItems = ticketDetailsRepo.getItems(ticketId).firstOrNull() ?: emptyList()
+        if (cartItems.isEmpty()) return false
+
+        val ticket = Ticket(id = null, name = name, total = cartItems.sumOf { it.price * it.qty })
+        val newTicketId = ticketsRepo.addTicket(ticket)
+
+        cartItems.forEach { item ->
+            ticketDetailsRepo.addItem(item.copy(id = null, ticketId = newTicketId))
         }
 
-        // Search
-        if (search.isNotEmpty()) {
-            itemsFiltered = itemsFiltered.filter { it.name.lowercase().contains(search) }
+        ticketDetailsRepo.clearCart(ticketId)
+        ticketsRepo.deleteTicket(ticketId)
+        fakeTicketId = null
+        return true
+    }
+
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val app = this[APPLICATION_KEY] as MyApp
+                HomeViewModel(
+                    itemsRepo = app.itemsRepo,
+                    categoriesRepo = app.categoriesRepo,
+                    ticketDetailsRepo = app.ticketDetailsRepo,
+                    ticketsRepo = app.ticketsRepo,
+                    grid = app.grid
+                )
+            }
         }
-
-        // Sort
-        _rvItems.value = if (sort)
-            itemsFiltered.sortedBy { it.name.lowercase() }
-        else
-            itemsFiltered.sortedByDescending { it.name.lowercase() }
-
-        // Categories: filter by name, then sort
-        val catsFiltered = if (search.isEmpty()) _categories.value
-        else _categories.value.filter { it.name.lowercase().contains(search) }
-        _rvCats.value = if (sort)
-            catsFiltered.sortedBy { it.name.lowercase() }
-        else
-            catsFiltered.sortedByDescending { it.name.lowercase() }
-
-        // Update empty state for current mode
-        _isEmpty.value = if (_mode.value == Mode.ITEMS)
-            _rvItems.value.isEmpty()
-        else
-            _rvCats.value.isEmpty()
     }
 }

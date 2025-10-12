@@ -21,7 +21,7 @@ interface TicketsDao {
     suspend fun getCurrentCart(): Ticket?
 
     @Insert
-    suspend fun addTicket(ticket: Ticket)
+    suspend fun addTicket(ticket: Ticket): Long
 
     @Update
     suspend fun updateTicket(ticket: Ticket)

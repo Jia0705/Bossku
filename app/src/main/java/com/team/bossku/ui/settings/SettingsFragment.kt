@@ -8,17 +8,21 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.team.bossku.MainActivity
+import com.team.bossku.MyApp
 import com.team.bossku.R
 import com.team.bossku.databinding.FragmentSettingsBinding
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 class SettingsFragment : Fragment() {
     private lateinit var binding: FragmentSettingsBinding
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         binding = FragmentSettingsBinding.inflate(inflater, container, false)
         return binding.root
@@ -26,6 +30,8 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val app = requireActivity().application as MyApp
 
         binding.llManageItems.setOnClickListener {
             findNavController().navigate(R.id.action_settingsFragment_to_itemListFragment)
@@ -41,7 +47,7 @@ class SettingsFragment : Fragment() {
 
         // Language
         val languages = listOf("English", "Bahasa Melayu", "中文")
-        val langTags  = listOf("en", "ms", "zh")
+        val langTags = listOf("en", "ms", "zh")
 
         val langAdapter = ArrayAdapter(
             requireContext(),
@@ -74,40 +80,36 @@ class SettingsFragment : Fragment() {
         }
 
         // Theme
-        val themes = listOf(
-            getString(R.string.light),
-            getString(R.string.dark)
-        )
-
+        val themes = listOf(getString(R.string.light), getString(R.string.dark))
         val themeAdapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_item,
             themes
         )
         themeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
         binding.spTheme.adapter = themeAdapter
 
-        fun currentTheme(): Int =
-            if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) 1 else 0
-
-        binding.spTheme.setSelection(currentTheme(), false)
+        lifecycleScope.launch {
+            app.theme.isDarkMode.collect { isDark ->
+                val themeIndex = if (isDark) 1 else 0
+                if (binding.spTheme.selectedItemPosition != themeIndex) {
+                    binding.spTheme.setSelection(themeIndex, false)
+                }
+            }
+        }
 
         binding.spTheme.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, v: View?, pos: Int, id: Long) {
-                val themeIndex = currentTheme()
-                if (pos == themeIndex) return     // do nothing
-
-                val mode = if (pos == 1)
-                    AppCompatDelegate.MODE_NIGHT_YES
-                else
-                    AppCompatDelegate.MODE_NIGHT_NO
-
-                AppCompatDelegate.setDefaultNightMode(mode)
-                requireActivity().recreate()
+                lifecycleScope.launch {
+                    val enableDarkMode = pos == 1
+                    app.theme.setDarkMode(enableDarkMode)
+                    AppCompatDelegate.setDefaultNightMode(
+                        if (enableDarkMode) AppCompatDelegate.MODE_NIGHT_YES
+                        else AppCompatDelegate.MODE_NIGHT_NO
+                    )
+                }
             }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {}
+            override fun onNothingSelected(parent: AdapterView<*>) { }
         }
     }
 }

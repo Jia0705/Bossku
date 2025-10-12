@@ -8,7 +8,9 @@ import com.team.bossku.R
 import com.team.bossku.ui.manage.base.BaseManageCategoryFragment
 
 class AddCategoryFragment : BaseManageCategoryFragment() {
-    override val viewModel: AddCategoryViewModel by viewModels()
+    override val viewModel: AddCategoryViewModel by viewModels{
+        AddCategoryViewModel.Factory
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -25,7 +27,7 @@ class AddCategoryFragment : BaseManageCategoryFragment() {
 
         // Save
         binding.mbSave.setOnClickListener {
-            val name  = binding.etName.text?.toString().orEmpty()
+            val name = binding.etName.text?.toString().orEmpty()
             val color = viewModel.color.value.ifBlank { "#FFFFFF" }
             viewModel.submit(name, color)
         }

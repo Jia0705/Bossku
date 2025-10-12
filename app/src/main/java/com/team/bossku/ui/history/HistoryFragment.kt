@@ -16,8 +16,10 @@ import com.team.bossku.ui.popup.SortPopFragment
 import kotlinx.coroutines.launch
 
 class HistoryFragment : Fragment() {
+    private val viewModel: HistoryViewModel by viewModels{
+        HistoryViewModel.Factory
+    }
     private lateinit var binding: FragmentHistoryBinding
-    private val viewModel: HistoryViewModel by viewModels()
     private lateinit var adapter: TicketsAdapter
 
     override fun onCreateView(
@@ -71,6 +73,5 @@ class HistoryFragment : Fragment() {
                 binding.llEmpty.visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
             }
         }
-        viewModel.loadHistory()
     }
 }

@@ -5,7 +5,7 @@ import com.team.bossku.data.model.TicketDetail
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class CartItemsRepo(
+class TicketDetailsRepo(
     private val dao: TicketDetailsDao
 ) {
     suspend fun addItem(item: TicketDetail) {
@@ -14,6 +14,10 @@ class CartItemsRepo(
 
     fun getItems(ticketId: Int): Flow<List<TicketDetail>> {
         return dao.getCartItems(ticketId)
+    }
+
+    suspend fun updateItem(item: TicketDetail) {
+        dao.updateTicketDetail(item)
     }
 
     suspend fun clearCart(ticketId: Int) {

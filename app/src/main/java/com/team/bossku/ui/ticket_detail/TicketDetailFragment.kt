@@ -20,7 +20,9 @@ import kotlinx.coroutines.launch
 class TicketDetailFragment : Fragment() {
 
     private lateinit var binding: FragmentTicketDetailBinding
-    private val viewModel: TicketDetailViewModel by viewModels()
+    private val viewModel: TicketDetailViewModel by viewModels{
+        TicketDetailViewModel.Factory
+    }
     private val args: TicketDetailFragmentArgs by navArgs()
     private lateinit var adapter: TicketsDetailsAdapter
     private var backTimer: CountDownTimer? = null
@@ -40,11 +42,11 @@ class TicketDetailFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.ticket.collect { ticket ->
                 if (ticket != null) {
-                    binding.tvHeader.text = ticket.name
+                    binding.tvHeader.text = ticket.ticket.name
                     binding.tvTotal.text = "RM %.2f".format(ticket.total)
                     adapter.setDetails(ticket.items)
 
-                    if (ticket.status == TicketStatus.PAID) {
+                    if (ticket.ticket.status == TicketStatus.PAID) {
                         binding.mbSave.text = "Paid"
                         binding.mbSave.isEnabled = false
                     } else {
@@ -75,8 +77,8 @@ class TicketDetailFragment : Fragment() {
         adapter = TicketsDetailsAdapter(
             emptyList(),
             { position, detail ->
-                val ticket = viewModel.ticket.value
-                if (ticket != null && ticket.status != TicketStatus.PAID) {
+                val currentTicket = viewModel.ticket.value
+                if (currentTicket != null && currentTicket.ticket.status != TicketStatus.PAID) {
                     val dialog = EditPopFragment(oldQty = detail.qty)
                     dialog.setListener(object : EditPopFragment.Listener {
                         override fun onClickSave(newQty: Int) {
@@ -87,8 +89,8 @@ class TicketDetailFragment : Fragment() {
                 }
             },
             { position, _ ->
-                val ticket = viewModel.ticket.value
-                if (ticket != null && ticket.status != TicketStatus.PAID) {
+                val currentTicket = viewModel.ticket.value
+                if (currentTicket != null && currentTicket.ticket.status != TicketStatus.PAID) {
                     viewModel.removeItem(position)
                 }
             }

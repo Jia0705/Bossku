@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.team.bossku.R
-import com.team.bossku.data.repo.CartItemsRepo
 import com.team.bossku.databinding.FragmentHomeBinding
 import com.team.bossku.ui.adapter.CategoriesAdapter
 import com.team.bossku.ui.adapter.ItemsAdapter
@@ -24,7 +23,9 @@ import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
-    private val viewModel: HomeViewModel by viewModels()
+    private val viewModel: HomeViewModel by viewModels{
+        HomeViewModel.Factory
+    }
     private lateinit var itemsAdapter: ItemsAdapter
     private lateinit var categoriesAdapter: CategoriesAdapter
 
@@ -40,36 +41,28 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupAdapter()
 
-        // LONG CLICK to switch mode
         binding.toolbar.setOnLongClickListener {
             val switch = if (viewModel.mode.value == Mode.ITEMS) Mode.CATEGORIES else Mode.ITEMS
             viewModel.switchMode(switch)
             true
         }
 
-        // Sort
         binding.ibSort.setOnClickListener {
             viewModel.setSort()
-            val asc = viewModel.sortAscending.value
             Toast.makeText(
                 requireContext(),
-                if (asc) getString(R.string.asc) else getString(R.string.des),
+                if (viewModel.sortAscending.value) getString(R.string.asc) else getString(R.string.des),
                 Toast.LENGTH_LONG
             ).show()
         }
 
-        // Ticket
         binding.ibCart.setOnClickListener {
-            val cartEmpty = CartItemsRepo.getInstance().isEmpty()
-            if (cartEmpty) {
-                // No items in cart, go to Ticket screen
-                findNavController().navigate(R.id.ticketFragment)
-            } else {
-                showSaveTicketDialog()
+            lifecycleScope.launch {
+                if (viewModel.isCartEmpty()) showSaveTicketDialog()
+                else findNavController().navigate(R.id.ticketFragment)
             }
         }
 
-        // Add item / Category
         binding.fabAdd.setOnClickListener {
             if (viewModel.mode.value == Mode.ITEMS) {
                 findNavController().navigate(R.id.addItemFragment)
@@ -78,7 +71,6 @@ class HomeFragment : Fragment() {
             }
         }
 
-        // Search
         binding.etSearch.doOnTextChanged { text, _, _, _ ->
             viewModel.setSearch(text?.toString().orEmpty())
         }
@@ -94,34 +86,29 @@ class HomeFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.mode.collect { mode ->
                 binding.rvItems.adapter = if (mode == Mode.ITEMS) itemsAdapter else categoriesAdapter
-
-                if (mode == Mode.ITEMS) {
-                    itemsAdapter.setItems(viewModel.rvItems.value)
-                } else {
-                    categoriesAdapter.setCategories(viewModel.rvCategories.value)
-                }
-
+                updateEmptyVisibility()
                 updateTexts()
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.rvItems.collect {
+                itemsAdapter.setItems(it);
                 updateEmptyVisibility()
             }
         }
 
         lifecycleScope.launch {
-            viewModel.rvItems.collect { list ->
-                itemsAdapter.setItems(list)
+            viewModel.rvCategories.collect {
+                categoriesAdapter.setCategories(it);
                 updateEmptyVisibility()
             }
         }
 
         lifecycleScope.launch {
-            viewModel.rvCategories.collect { list ->
-                categoriesAdapter.setCategories(list)
+            viewModel.isEmpty.collect {
                 updateEmptyVisibility()
             }
-        }
-
-        lifecycleScope.launch {
-            viewModel.isEmpty.collect { updateEmptyVisibility() }
         }
 
         lifecycleScope.launch {
@@ -132,11 +119,16 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+        updateTexts()
+        updateEmptyVisibility()
     }
 
     private fun setupAdapter() {
         itemsAdapter = ItemsAdapter(emptyList()) { item ->
-            item.id?.let { viewModel.addItemToTicket(it) }
+            lifecycleScope.launch {
+                item.id?.let {
+                    viewModel.addItemToCart(it) }
+            }
         }
 
         categoriesAdapter = CategoriesAdapter(emptyList()) { cat ->
@@ -149,7 +141,6 @@ class HomeFragment : Fragment() {
             rvItems.layoutManager = layoutManager
         }
 
-        // Swap grid
         val swap = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT,
             0
@@ -169,24 +160,18 @@ class HomeFragment : Fragment() {
             override fun isLongPressDragEnabled() = true
         })
         swap.attachToRecyclerView(binding.rvItems)
-        updateTexts()
-        updateEmptyVisibility()
     }
 
-    // Update text in different mode
     private fun updateTexts() {
         val itemsMode = viewModel.mode.value == Mode.ITEMS
         val selectedCatName = viewModel.getSelectedCategoryName()
 
-        // header
         binding.tvHeader.text = if (itemsMode) {
             selectedCatName ?: getString(R.string.items)
         } else {
             getString(R.string.categories)
         }
-        // add button
         binding.fabAdd.text = if (itemsMode) getString(R.string.add_new_item) else getString(R.string.add_new_category)
-        // empty view
         binding.tvEmpty.text = if (itemsMode) getString(R.string.empty_item) else getString(R.string.empty_category)
     }
 
@@ -200,11 +185,14 @@ class HomeFragment : Fragment() {
         val dialog = SavePopFragment()
         dialog.setListener(object : SavePopFragment.Listener {
             override fun onClickSave(name: String) {
-                val created = viewModel.saveCartAsTicket(name)
-                if (created) {
-                    findNavController().navigate(R.id.ticketFragment)
-                } else {
-                    Toast.makeText(requireContext(), getString(R.string.empty), Toast.LENGTH_LONG).show()
+                lifecycleScope.launch {
+                    val saved = viewModel.saveCartAsTicket(name)
+                    if (saved) {
+                        dialog.dismiss()
+                        findNavController().navigate(R.id.ticketFragment)
+                    } else {
+                        Toast.makeText(requireContext(), getString(R.string.empty), Toast.LENGTH_LONG).show()
+                    }
                 }
             }
         })
