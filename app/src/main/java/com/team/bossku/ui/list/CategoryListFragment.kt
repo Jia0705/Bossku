@@ -2,16 +2,20 @@ package com.team.bossku.ui.list
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.team.bossku.MyApp
 import com.team.bossku.R
 import com.team.bossku.data.model.Category
 import com.team.bossku.data.repo.CategoriesRepo
 import com.team.bossku.ui.adapter.CategoriesAdapter
 import com.team.bossku.ui.manage.base.BaseManageListFragment
+import kotlinx.coroutines.launch
 
 class CategoryListFragment : BaseManageListFragment() {
     private lateinit var adapter: CategoriesAdapter
+    private lateinit var repo: CategoriesRepo
 
     override fun title() = R.string.categories
     override fun emptyText() = R.string.empty_category
@@ -20,11 +24,13 @@ class CategoryListFragment : BaseManageListFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val repo = CategoriesRepo.getInstance()
+        repo = (requireActivity().application as MyApp).categoriesRepo
 
-        // provide data to BaseViewModel
-        viewModel.loadAll = {
-            repo.getCategories().map { it as Any }
+        lifecycleScope.launch {
+            repo.getCategories().collect { categories ->
+                viewModel.loadAll = { categories.map { it as Any } }
+                viewModel.refresh()
+            }
         }
 
         // search by name
@@ -42,8 +48,6 @@ class CategoryListFragment : BaseManageListFragment() {
         viewModel.sortKey = { any ->
             (any as Category).name.lowercase()
         }
-
-        viewModel.refresh()
     }
 
     override fun onFabClicked() {
@@ -52,8 +56,7 @@ class CategoryListFragment : BaseManageListFragment() {
 
     override fun listAdapter(): RecyclerView.Adapter<*>? {
         adapter = CategoriesAdapter(emptyList()) { category ->
-            val id = category.id
-            if (id != null) {
+            category.id?.let { id ->
                 val action = CategoryListFragmentDirections.actionCategoryListFragmentToEditCategoryFragment(id)
                 findNavController().navigate(action)
             }

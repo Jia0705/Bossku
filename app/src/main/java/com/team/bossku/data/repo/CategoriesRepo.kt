@@ -1,38 +1,29 @@
 package com.team.bossku.data.repo
 
+import com.team.bossku.data.db.CategoriesDao
 import com.team.bossku.data.model.Category
+import kotlinx.coroutines.flow.Flow
 
-class CategoriesRepo private constructor() {
-    val map = mutableMapOf<Int, Category>()
-    var counter = 0
-
-    fun addCategory(category: Category) {
-        counter = counter + 1
-        map[counter] = category.copy(id = counter)
+class CategoriesRepo(
+    private val dao: CategoriesDao
+) {
+    suspend fun addCategory(category: Category) {
+        dao.addCategory(category)
     }
 
-    fun getCategoryById(id: Int): Category? {
-        return map[id]
+    suspend fun getCategoryById(id: Int): Category? {
+        return dao.getCategoryById(id)
     }
 
-    fun getCategories() = map.values.toList()
-
-    fun updateCategory(id: Int, category: Category) {
-        map[id] = category.copy(id = id)
+    fun getCategories(): Flow<List<Category>> {
+        return dao.getAllCategories()
     }
 
-    fun deleteCategory(id: Int) {
-        map.remove(id)
+    suspend fun updateCategory(category: Category) {
+        dao.updateCategory(category)
     }
 
-    companion object {
-        private var instance: CategoriesRepo? = null
-
-        fun getInstance(): CategoriesRepo {
-            if (instance == null) {
-                instance = CategoriesRepo()
-            }
-            return instance!!
-        }
+    suspend fun deleteCategory(id: Int) {
+        dao.deleteCategory(id)
     }
 }

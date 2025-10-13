@@ -16,7 +16,9 @@ import kotlinx.coroutines.launch
 
 class TicketFragment : Fragment() {
     private lateinit var binding: FragmentTicketBinding
-    private val viewModel: TicketViewModel by viewModels()
+    private val viewModel: TicketViewModel by viewModels{
+        TicketViewModel.Factory
+    }
     private lateinit var adapter: TicketsAdapter
 
     override fun onCreateView(
@@ -30,8 +32,6 @@ class TicketFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupAdapter()
-
-        viewModel.loadTickets()
 
         lifecycleScope.launch {
             viewModel.tickets.collect { list ->

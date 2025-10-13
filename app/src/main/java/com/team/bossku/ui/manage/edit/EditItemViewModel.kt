@@ -1,29 +1,46 @@
 package com.team.bossku.ui.manage.edit
 
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.team.bossku.MyApp
 import com.team.bossku.data.model.Item
 import com.team.bossku.data.repo.ItemsRepo
 import com.team.bossku.ui.manage.base.BaseManageItemViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class EditItemViewModel(
-    private val itemsRepo: ItemsRepo = ItemsRepo.getInstance()
+    private val itemsRepo: ItemsRepo
 ) : BaseManageItemViewModel(itemsRepo) {
 
-    lateinit var item: Item
+    private val _item = MutableStateFlow<Item?>(null)
+    val item: StateFlow<Item?> = _item
 
     fun loadItemById(id: Int) {
-        item = itemsRepo.getItemById(id) ?: throw IllegalArgumentException("Item not found")
-        color.value = item.color
+        viewModelScope.launch {
+            try {
+                val selectedItem = itemsRepo.getItemById(id) ?: throw IllegalArgumentException("Item not found")
+                _item.value = selectedItem
+                color.value = selectedItem.color
+            } catch (e: Exception) {
+                _error.emit(e.message.orEmpty())
+            }
+        }
     }
 
     fun deleteItem() {
-        try {
-            val id = item.id ?: throw IllegalArgumentException("Invalid item id")
-            itemsRepo.deleteItem(id)
-            viewModelScope.launch { _finish.emit(Unit) }
-        } catch (e: Exception) {
-            viewModelScope.launch { _error.emit(e.message.orEmpty()) }
+        viewModelScope.launch {
+            try {
+                val id = item.value?.id ?: throw IllegalArgumentException("Invalid item id")
+                itemsRepo.deleteItem(id)
+                _finish.emit(Unit)
+            } catch (e: Exception) {
+                _error.emit(e.message.orEmpty())
+            }
         }
     }
 
@@ -35,29 +52,37 @@ class EditItemViewModel(
         barcode: String,
         color: String
     ) {
-        try {
-            require(name.isNotBlank()) { "Name cannot be blank" }
-            require(price > 0) { "Price must be greater than 0" }
+        viewModelScope.launch {
+            try {
+                require(name.isNotBlank()) { "Name cannot be blank" }
+                require(price > 0) { "Price must be greater than 0" }
 
-            val default = color.ifBlank { "#FFFFFF" }
+                val item = _item.value ?: throw IllegalArgumentException("Item not loaded")
+                val default = color.ifBlank { "#FFFFFF" }
 
-            val newItem = item.copy(
-                name = name,
-                categoryId = categoryId,
-                price = price,
-                cost = cost,
-                barcode = barcode,
-                color = default
-            )
-            val id = requireNotNull(newItem.id) { "Invalid item id" }
-            itemsRepo.updateItem(id, newItem)
+                val newItem = item.copy(
+                    name = name,
+                    categoryId = if (categoryId == -1) null else categoryId,
+                    price = price,
+                    cost = cost,
+                    barcode = barcode,
+                    color = default
+                )
 
-            viewModelScope.launch {
+                itemsRepo.updateItem(newItem)
                 _finish.emit(Unit)
+            } catch (e: Exception) {
+                _error.emit(e.message.toString())
             }
-        } catch (e: Exception) {
-            viewModelScope.launch { _error.emit(e.message.toString()) }
+        }
+    }
+
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val myRepository = (this[APPLICATION_KEY] as MyApp).itemsRepo
+                EditItemViewModel(itemsRepo = myRepository)
+            }
         }
     }
 }
-

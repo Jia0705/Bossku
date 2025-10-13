@@ -9,9 +9,13 @@ import com.team.bossku.data.model.Item
 import com.team.bossku.data.repo.ItemsRepo
 import com.team.bossku.ui.adapter.ItemsAdapter
 import com.team.bossku.ui.manage.base.BaseManageListFragment
+import androidx.lifecycle.lifecycleScope
+import com.team.bossku.MyApp
+import kotlinx.coroutines.launch
 
 class ItemListFragment : BaseManageListFragment() {
     private lateinit var adapter: ItemsAdapter
+    private lateinit var repo: ItemsRepo
 
     override fun title() = R.string.items
     override fun emptyText() = R.string.empty_item
@@ -20,23 +24,23 @@ class ItemListFragment : BaseManageListFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val repo = ItemsRepo.getInstance()
+        repo = (requireActivity().application as MyApp).itemsRepo
 
-        viewModel.loadAll = { repo.getItems().map { it as Any } }
+        lifecycleScope.launch {
+            repo.getItems().collect { itemsList ->
+                viewModel.loadAll = { itemsList.map { it as Any } }
+                viewModel.refresh()
+            }
+        }
 
         viewModel.matches = { any, query ->
             val item = any as Item
             val q = query.trim().lowercase()
-            if (q.isEmpty()) {
-                true
-            } else {
-                item.name.lowercase().contains(q)
-            }
+            if (q.isEmpty()) true
+            else item.name.lowercase().contains(q)
         }
 
         viewModel.sortKey = { any -> (any as Item).name.lowercase() }
-
-        viewModel.refresh()
     }
 
     override fun onFabClicked() {

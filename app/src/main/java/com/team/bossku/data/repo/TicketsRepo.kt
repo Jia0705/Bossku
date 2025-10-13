@@ -1,49 +1,57 @@
 package com.team.bossku.data.repo
 
+import com.team.bossku.data.db.TicketDetailsDao
+import com.team.bossku.data.db.TicketsDao
 import com.team.bossku.data.model.Ticket
+import com.team.bossku.data.model.TicketDetail
 import com.team.bossku.data.model.TicketStatus
+import com.team.bossku.data.model.TicketWithDetails
+import kotlinx.coroutines.flow.Flow
 
-class TicketsRepo private constructor() {
-    val map = mutableMapOf<Int, Ticket>()
-    var counter = 0
-
-    fun addTicket(ticket: Ticket) {
-        counter = counter + 1
-        map[counter] = ticket.copy(id = counter)
+class TicketsRepo(
+    private val dao: TicketsDao,
+    private val ticketDetailsDao: TicketDetailsDao
+) {
+    suspend fun addTicket(ticket: Ticket): Int {
+        return dao.addTicket(ticket).toInt()
     }
 
-    fun getTicketById(id: Int): Ticket? {
-        return map[id]
+    fun getTickets(): Flow<List<Ticket>> {
+        return dao.getAllTickets()
     }
 
-    fun getTickets() = map.values.toList()
-
-    fun updateTicket(id: Int, ticket: Ticket) {
-        map[id] = ticket.copy(id = id)
+    suspend fun updateTicket(ticket: Ticket) {
+        dao.updateTicket(ticket)
     }
 
-    fun markAsPaid(id: Int) {
-        val ticket = map[id] ?: return
+    suspend fun deleteTicket(id: Int) {
+        dao.deleteTicket(id)
+    }
+
+    fun getTicketsWithDetails(): Flow<List<TicketWithDetails>> {
+        return dao.getAllTicketsWithDetails()
+    }
+
+    fun getTicketWithDetailsById(id: Int): Flow<TicketWithDetails?> {
+        return dao.getTicketWithDetailsById(id)
+    }
+
+    suspend fun updateTicketDetail(detail: TicketDetail) {
+        ticketDetailsDao.updateTicketDetail(detail)
+    }
+
+    suspend fun deleteTicketDetail(id: Int) {
+        ticketDetailsDao.deleteTicketDetail(id)
+    }
+
+    suspend fun markAsPaid(id: Int) {
+        val ticket = dao.getTicketById(id) ?: return
         if (ticket.status == TicketStatus.SAVED) {
-            map[id] = ticket.copy(
+            val updatedTicket = ticket.copy(
                 status = TicketStatus.PAID,
                 paidAt = System.currentTimeMillis()
             )
-        }
-    }
-
-    fun deleteTicket(id: Int) {
-        map.remove(id)
-    }
-
-    companion object {
-        private var instance: TicketsRepo? = null
-
-        fun getInstance(): TicketsRepo {
-            if (instance == null) {
-                instance = TicketsRepo()
-            }
-            return instance!!
+            dao.updateTicket(updatedTicket)
         }
     }
 }

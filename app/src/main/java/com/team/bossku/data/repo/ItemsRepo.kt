@@ -1,38 +1,29 @@
 package com.team.bossku.data.repo
 
+import com.team.bossku.data.db.ItemsDao
 import com.team.bossku.data.model.Item
+import kotlinx.coroutines.flow.Flow
 
-class ItemsRepo private constructor() {
-    val map = mutableMapOf<Int, Item>()
-    var counter = 0
-
-    fun addItem(item: Item) {
-        counter = counter + 1
-        map[counter] = item.copy(id = counter)
+class ItemsRepo(
+    private val dao: ItemsDao
+) {
+    suspend fun addItem(item: Item) {
+        dao.addItem(item)
     }
 
-    fun getItemById(id: Int): Item? {
-        return map[id]
+    suspend fun getItemById(id: Int): Item? {
+        return dao.getItemById(id)
     }
 
-    fun getItems() = map.values.toList()
-
-    fun updateItem(id: Int, item: Item) {
-        map[id] = item.copy(id = id)
+    fun getItems(): Flow<List<Item>> {
+        return dao.getAllItems()
     }
 
-    fun deleteItem(id: Int) {
-        map.remove(id)
+    suspend fun updateItem(item: Item) {
+        dao.updateItem(item)
     }
 
-    companion object {
-        private var instance: ItemsRepo? = null
-
-        fun getInstance(): ItemsRepo {
-            if (instance == null) {
-                instance = ItemsRepo()
-            }
-            return instance!!
-        }
+    suspend fun deleteItem(id: Int) {
+        dao.deleteItem(id)
     }
 }
