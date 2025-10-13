@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.team.bossku.R
 import com.team.bossku.data.model.TicketStatus
 import com.team.bossku.databinding.FragmentTicketDetailBinding
 import com.team.bossku.ui.adapter.TicketsDetailsAdapter
@@ -47,10 +48,10 @@ class TicketDetailFragment : Fragment() {
                     adapter.setDetails(ticket.items)
 
                     if (ticket.ticket.status == TicketStatus.PAID) {
-                        binding.mbSave.text = "Paid"
+                        binding.mbSave.text = getString(R.string.paid)
                         binding.mbSave.isEnabled = false
                     } else {
-                        binding.mbSave.text = "Pay"
+                        binding.mbSave.text = getString(R.string.pay)
                         binding.mbSave.isEnabled = true
                     }
                 }

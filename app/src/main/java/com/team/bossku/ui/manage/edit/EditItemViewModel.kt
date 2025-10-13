@@ -9,19 +9,22 @@ import com.team.bossku.MyApp
 import com.team.bossku.data.model.Item
 import com.team.bossku.data.repo.ItemsRepo
 import com.team.bossku.ui.manage.base.BaseManageItemViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class EditItemViewModel(
     private val itemsRepo: ItemsRepo
 ) : BaseManageItemViewModel(itemsRepo) {
 
-    lateinit var item: Item
+    private val _item = MutableStateFlow<Item?>(null)
+    val item: StateFlow<Item?> = _item
 
     fun loadItemById(id: Int) {
         viewModelScope.launch {
             try {
                 val selectedItem = itemsRepo.getItemById(id) ?: throw IllegalArgumentException("Item not found")
-                item = selectedItem
+                _item.value = selectedItem
                 color.value = selectedItem.color
             } catch (e: Exception) {
                 _error.emit(e.message.orEmpty())
@@ -32,7 +35,7 @@ class EditItemViewModel(
     fun deleteItem() {
         viewModelScope.launch {
             try {
-                val id = item.id ?: throw IllegalArgumentException("Invalid item id")
+                val id = item.value?.id ?: throw IllegalArgumentException("Invalid item id")
                 itemsRepo.deleteItem(id)
                 _finish.emit(Unit)
             } catch (e: Exception) {
@@ -54,7 +57,8 @@ class EditItemViewModel(
                 require(name.isNotBlank()) { "Name cannot be blank" }
                 require(price > 0) { "Price must be greater than 0" }
 
-            val default = color.ifBlank { "#FFFFFF" }
+                val item = _item.value ?: throw IllegalArgumentException("Item not loaded")
+                val default = color.ifBlank { "#FFFFFF" }
 
                 val newItem = item.copy(
                     name = name,

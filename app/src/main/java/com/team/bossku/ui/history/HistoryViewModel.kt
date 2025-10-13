@@ -21,8 +21,8 @@ class HistoryViewModel(
 
     // Search + Sort
     private val _search = MutableStateFlow("")
-    private val _sortAscending = MutableStateFlow(false)   // false = desc by default
-    private val _sortByName = MutableStateFlow(true)       // true = name, false = date
+    private val _sortAscending = MutableStateFlow(false)
+    private val _sortByName = MutableStateFlow(false)
     private val _history = MutableStateFlow<List<Ticket>>(emptyList())
     val history: StateFlow<List<Ticket>> = _history
 
@@ -79,6 +79,14 @@ class HistoryViewModel(
             }
         }
         _history.value = filteredList
+    }
+
+    fun deleteHistoryTicket(ticketId: Int) {
+        viewModelScope.launch {
+            repo.deleteTicket(ticketId)
+            _allPaid.value = _allPaid.value.filterNot { it.id == ticketId }
+            applyFilters()
+        }
     }
 
     companion object {

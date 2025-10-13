@@ -55,7 +55,7 @@ class HistoryListFragment : BaseManageListFragment() {
 
         viewModel.sortKey = { any ->
             val twi = any as TicketWithItems
-            (twi.ticket.id ?: -1).toString()
+            (twi.ticket.paidAt ?: twi.ticket.createdAt).toString()
         }
     }
 

@@ -121,6 +121,14 @@ class HomeViewModel(
             val newSort = !_sort.value
             _sort.value = newSort
             grid.saveSortAscending(newSort)
+
+            if (_mode.value == Mode.ITEMS) {
+                _manualOrder.value = emptyList()
+                grid.saveManualOrder(emptyList())
+            } else {
+                _manualCatOrder.value = emptyList()
+                grid.saveManualCategoryOrder(emptyList())
+            }
             applyFilters()
         }
     }
@@ -194,11 +202,12 @@ class HomeViewModel(
     }
 
     suspend fun addItemToCart(itemId: Int, increment: Int = 1) {
-        val item = _items.value.firstOrNull { it.id == itemId } ?: return
+        val item = _items.value.firstOrNull { it.id == itemId } ?: throw IllegalStateException("Item does not exist")
 
         if (fakeTicketId == null) {
             val fakeTicket = Ticket(id = null, name = "Ticket", total = 0.0)
-            fakeTicketId = ticketsRepo.addTicket(fakeTicket)
+            val newTicketId = ticketsRepo.addTicket(fakeTicket) ?: throw IllegalStateException("Failed to create ticket")
+            fakeTicketId = newTicketId
         }
         val ticketId = fakeTicketId!!
         val existingItems = ticketDetailsRepo.getItems(ticketId).firstOrNull() ?: emptyList()

@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.team.bossku.databinding.FragmentHistoryBinding
 import com.team.bossku.ui.adapter.TicketsAdapter
+import com.team.bossku.ui.popup.DeletePopFragment
 import com.team.bossku.ui.popup.SortPopFragment
 import kotlinx.coroutines.launch
 
@@ -40,6 +41,17 @@ class HistoryFragment : Fragment() {
                     val action = HistoryFragmentDirections.actionHistoryFragmentToHistoryDetailFragment(id)
                     findNavController().navigate(action)
                 }
+            },
+            onLongClick = { ticket ->
+                val dialog = DeletePopFragment()
+                dialog.setListener(object : DeletePopFragment.Listener {
+                    override fun onClickCancel() { }
+                    override fun onClickDelete() {
+                        val id = ticket.id ?: return
+                        viewModel.deleteHistoryTicket(id)
+                    }
+                })
+                dialog.show(parentFragmentManager, "confirm_delete_history_ticket")
             }
         )
 

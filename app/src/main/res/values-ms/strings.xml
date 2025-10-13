@@ -51,4 +51,6 @@
     <string name="done">Selesai</string>
     <string name="tvtotal">Jumlah:</string>
     <string name="enter_quantity">Masukkan Kuantiti</string>
+    <string name="pay">Bayar</string>
+    <string name="paid">Dibayar</string>
 </resources>

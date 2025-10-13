@@ -51,4 +51,6 @@
     <string name="done">完成</string>
     <string name="tvtotal">总计:</string>
     <string name="enter_quantity">请输入数量</string>
+    <string name="pay">支付</string>
+    <string name="paid">已支付</string>
 </resources>

@@ -58,8 +58,11 @@ class HomeFragment : Fragment() {
 
         binding.ibCart.setOnClickListener {
             lifecycleScope.launch {
-                if (viewModel.isCartEmpty()) showSaveTicketDialog()
-                else findNavController().navigate(R.id.ticketFragment)
+                if (!viewModel.isCartEmpty()) {
+                    showSaveTicketDialog()
+                } else {
+                    findNavController().navigate(R.id.ticketFragment)
+                }
             }
         }
 

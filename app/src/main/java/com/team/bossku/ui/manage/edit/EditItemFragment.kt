@@ -43,23 +43,23 @@ class EditItemFragment : BaseManageItemFragment() {
 
         lifecycleScope.launch {
             viewModel.loadItemById(args.itemId)
+            viewModel.item.collect { selectedItem ->
+                selectedItem?.let { item ->
+                    binding.etName.setText(item.name)
+                    binding.etPrice.setText(item.price.toString())
+                    binding.etCost.setText(item.cost.toString())
+                    binding.etBarcode.setText(item.barcode.orEmpty())
+                    viewModel.color.value = item.color
 
-            val categories = app.categoriesRepo.getCategories().firstOrNull() ?: emptyList()
-
-            viewModel.item.let { selectedItem ->
-                binding.etName.setText(selectedItem.name)
-                binding.etPrice.setText(selectedItem.price.toString())
-                binding.etCost.setText(selectedItem.cost.toString())
-                binding.etBarcode.setText(selectedItem.barcode.orEmpty())
-                viewModel.color.value = selectedItem.color
-
-                val cat = categories.find { it.id == selectedItem.categoryId }
-                if (cat != null) {
-                    storeCategoryId = cat.id
-                    binding.acCategory.setText(cat.name, false)
-                } else {
-                    storeCategoryId = null
-                    binding.acCategory.setText(getString(R.string.no_category), false)
+                    val categories = app.categoriesRepo.getCategories().firstOrNull() ?: emptyList()
+                    val cat = categories.find { it.id == item.categoryId }
+                    if (cat != null) {
+                        storeCategoryId = cat.id
+                        binding.acCategory.setText(cat.name, false)
+                    } else {
+                        storeCategoryId = null
+                        binding.acCategory.setText(getString(R.string.no_category), false)
+                    }
                 }
             }
         }

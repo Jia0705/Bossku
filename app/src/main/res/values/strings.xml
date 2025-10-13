@@ -51,4 +51,6 @@
     <string name="done">Done</string>
     <string name="tvtotal">Total:</string>
     <string name="enter_quantity">Enter Quantity</string>
+    <string name="pay">Pay</string>
+    <string name="paid">Paid</string>
 </resources>
