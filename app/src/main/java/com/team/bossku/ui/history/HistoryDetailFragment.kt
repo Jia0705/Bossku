@@ -15,7 +15,9 @@ import kotlinx.coroutines.launch
 
 class HistoryDetailFragment : Fragment() {
     private lateinit var binding: FragmentTicketDetailBinding
-    private val viewModel: TicketDetailViewModel by viewModels()
+    private val viewModel: TicketDetailViewModel by viewModels{
+        TicketDetailViewModel.Factory
+    }
     private lateinit var adapter: TicketsDetailsAdapter
     private val args: HistoryDetailFragmentArgs by navArgs()
 
@@ -41,7 +43,7 @@ class HistoryDetailFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.ticket.collect { ticket ->
                 if (ticket != null) {
-                    binding.tvHeader.text = ticket.name
+                    binding.tvHeader.text = ticket.ticket.name
                     binding.tvTotal.text = String.format("RM %.2f", ticket.total)
                     adapter.setDetails(ticket.items)
                     binding.mbSave.visibility = View.GONE

@@ -5,15 +5,18 @@ import android.view.View
 import android.widget.ArrayAdapter
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.team.bossku.MyApp
 import com.team.bossku.R
-import com.team.bossku.data.repo.CategoriesRepo
 import com.team.bossku.ui.manage.base.BaseManageItemFragment
+import kotlinx.coroutines.launch
 
 class AddItemFragment : BaseManageItemFragment() {
-    override val viewModel: AddItemViewModel by viewModels()
+    override val viewModel: AddItemViewModel by viewModels{
+        AddItemViewModel.Factory
+    }
 
-    // store the chosen category id
     private var storeCategoryId: Int = -1
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,54 +44,57 @@ class AddItemFragment : BaseManageItemFragment() {
     }
 
     private fun categoryDropdown(newCategory: Boolean) {
-        val repo = CategoriesRepo.getInstance()
-        val cats = repo.getCategories()
+        val repo = (requireActivity().application as MyApp).categoriesRepo
 
-        // [No category] + real categories + [Add new category]
-        val display = mutableListOf(getString(R.string.no_category))
-        display.addAll(cats.map { it.name })
-        display.add(getString(R.string.add_new_category))
+        lifecycleScope.launch {
+            repo.getCategories().collect { cats ->
 
-        val adapter = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_dropdown_item_1line,
-            display
-        )
-        binding.acCategory.setAdapter(adapter)
+                // [No category] + actual categories + [Add new category]
+                val display = mutableListOf(getString(R.string.no_category))
+                display.addAll(cats.map { it.name })
+                display.add(getString(R.string.add_new_category))
 
-        // Show full list when clicked
-        binding.acCategory.setOnClickListener {
-            // reset filter and show the full dropdown
-            (binding.acCategory.adapter as ArrayAdapter<*>).filter.filter(null)
-            binding.acCategory.showDropDown()
-        }
+                val adapter = ArrayAdapter(
+                    requireContext(),
+                    android.R.layout.simple_dropdown_item_1line,
+                    display
+                )
+                binding.acCategory.setAdapter(adapter)
 
-        binding.acCategory.setOnItemClickListener { _, _, pos, _ ->
-            when (pos) {
-                0 -> { // No category
-                    storeCategoryId = -1
-                    binding.acCategory.setText(getString(R.string.no_category), false)
+                // Show full list when clicked
+                binding.acCategory.setOnClickListener {
+                    (binding.acCategory.adapter as ArrayAdapter<*>).filter.filter(null)
+                    binding.acCategory.showDropDown()
                 }
-                display.lastIndex -> { // Add new category
-                    storeCategoryId = -1
-                    binding.acCategory.setText(getString(R.string.no_category), false)
-                    findNavController().navigate(R.id.addCategoryFragment)
+
+                binding.acCategory.setOnItemClickListener { _, _, pos, _ ->
+                    when (pos) {
+                        0 -> { // No category
+                            storeCategoryId = -1
+                            binding.acCategory.setText(getString(R.string.no_category), false)
+                        }
+                        display.lastIndex -> { // Add new category
+                            storeCategoryId = -1
+                            binding.acCategory.setText(getString(R.string.no_category), false)
+                            findNavController().navigate(R.id.addCategoryFragment)
+                        }
+                        else -> {
+                            val cat = cats[pos - 1]
+                            storeCategoryId = cat.id ?: -1
+                            binding.acCategory.setText(cat.name, false)
+                        }
+                    }
                 }
-                else -> {
-                    val cat = cats[pos - 1]
-                    storeCategoryId = cat.id ?: -1
-                    binding.acCategory.setText(cat.name, false)
+
+                //  After create a new category, auto-select the last real category
+                if (newCategory && cats.isNotEmpty()) {
+                    val last = cats.last()
+                    storeCategoryId = last.id ?: -1
+                    binding.acCategory.setText(last.name, false)
+                } else if (binding.acCategory.text.isNullOrBlank()) {
+                    binding.acCategory.setText(getString(R.string.no_category), false)
                 }
             }
-        }
-
-        //  after create a new category, auto-select the last real category
-        if (newCategory && cats.isNotEmpty()) {
-            val last = cats.last()
-            storeCategoryId = last.id ?: -1
-            binding.acCategory.setText(last.name, false)
-        } else if (binding.acCategory.text.isNullOrBlank()) {
-            binding.acCategory.setText(getString(R.string.no_category), false)
         }
     }
 

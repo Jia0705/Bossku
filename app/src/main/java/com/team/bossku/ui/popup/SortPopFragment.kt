@@ -26,24 +26,29 @@ class SortPopFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val view = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_sort_pop, null)
 
-        val btnSort = view.findViewById<RadioGroup>(R.id.rgSort)
-        val btnSortBy = view.findViewById<RadioGroup>(R.id.rgSortBy)
+        val rgSort = view.findViewById<RadioGroup>(R.id.rgSort)
+        val rgSortBy = view.findViewById<RadioGroup>(R.id.rgSortBy)
         val btnDone = view.findViewById<MaterialButton>(R.id.mbDone)
 
         val dialog = AlertDialog.Builder(requireContext()).setView(view).create()
 
-        btnSort.setOnCheckedChangeListener { group, checkedId ->
-            when(checkedId) {
-                R.id.rbAsc -> listener?.onSort(true)
-                R.id.rbDes -> listener?.onSort(false)
-            }
+        var isSortByName = true
+
+        rgSortBy.setOnCheckedChangeListener { _, checkedId ->
+            isSortByName = checkedId == R.id.rbTitle
+            listener?.onSortBy(isSortByName)
         }
 
-        btnSortBy.setOnCheckedChangeListener { group, checkedId ->
-            when(checkedId) {
-                R.id.rbTitle -> listener?.onSortBy(true)
-                R.id.rbDatetime -> listener?.onSortBy(false)
+        rgSort.setOnCheckedChangeListener { _, checkedId ->
+            val isAscSelected = checkedId == R.id.rbAsc
+
+            val finalSort = if (isSortByName) {
+                isAscSelected
+            } else {
+                isAscSelected
             }
+
+            listener?.onSort(finalSort)
         }
 
         btnDone.setOnClickListener {
