@@ -28,11 +28,30 @@ class AddItemFragment : BaseManageItemFragment() {
         binding.mbDelete.visibility = View.GONE
 
         // Color
-        binding.c1.setOnClickListener { viewModel.color.value = "#FFFF0000" }
-        binding.c2.setOnClickListener { viewModel.color.value = "#FFFFA500" }
-        binding.c3.setOnClickListener { viewModel.color.value = "#FFFFFF00" }
-        binding.c4.setOnClickListener { viewModel.color.value = "#FF00FF00" }
-        binding.c5.setOnClickListener { viewModel.color.value = "#FF0000FF" }
+        binding.c1.setOnClickListener { 
+            viewModel.color.value = "#FFFF0000"
+            updateColorBorder("#FFFF0000")
+        }
+        binding.c2.setOnClickListener { 
+            viewModel.color.value = "#FFFFA500"
+            updateColorBorder("#FFFFA500")
+        }
+        binding.c3.setOnClickListener { 
+            viewModel.color.value = "#FFFFFF00"
+            updateColorBorder("#FFFFFF00")
+        }
+        binding.c4.setOnClickListener { 
+            viewModel.color.value = "#FF00FF00"
+            updateColorBorder("#FF00FF00")
+        }
+        binding.c5.setOnClickListener { 
+            viewModel.color.value = "#FF0000FF"
+            updateColorBorder("#FF0000FF")
+        }
+        binding.btnResetColor.setOnClickListener { 
+            viewModel.color.value = "#FFFFFF"
+            updateColorBorder("#FFFFFF")
+        }
 
         // Category dropdown
         categoryDropdown(newCategory = false)

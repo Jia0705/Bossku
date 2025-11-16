@@ -20,6 +20,9 @@ interface TicketsDao {
     @Query("SELECT * FROM Ticket WHERE status = 'SAVED' LIMIT 1")
     suspend fun getCurrentCart(): Ticket?
 
+    @Query("SELECT * FROM Ticket WHERE name = '__TEMP__' AND status = 'SAVED' LIMIT 1")
+    suspend fun getFakeTicket(): Ticket?
+
     @Insert
     suspend fun addTicket(ticket: Ticket): Long
 

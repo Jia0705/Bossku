@@ -49,6 +49,7 @@ class HistoryFragment : Fragment() {
                     override fun onClickDelete() {
                         val id = ticket.id ?: return
                         viewModel.deleteHistoryTicket(id)
+                        dialog.dismiss()
                     }
                 })
                 dialog.show(parentFragmentManager, "confirm_delete_history_ticket")

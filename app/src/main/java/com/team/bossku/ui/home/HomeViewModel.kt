@@ -61,6 +61,12 @@ class HomeViewModel(
     private var fakeTicketId: Int? = null
 
     init {
+        // Restore fake ticket if it exists 
+        viewModelScope.launch {
+            val existingFakeTicket = ticketsRepo.getFakeTicket()
+            fakeTicketId = existingFakeTicket?.id
+        }
+
         viewModelScope.launch {
             grid.manualOrder.collect { orderString ->
                 _manualOrder.value = if (orderString.isBlank()) emptyList()
@@ -205,7 +211,7 @@ class HomeViewModel(
         val item = _items.value.firstOrNull { it.id == itemId } ?: throw IllegalStateException("Item does not exist")
 
         if (fakeTicketId == null) {
-            val fakeTicket = Ticket(id = null, name = "Ticket", total = 0.0)
+            val fakeTicket = Ticket(id = null, name = "__TEMP__", total = 0.0)
             val newTicketId = ticketsRepo.addTicket(fakeTicket) ?: throw IllegalStateException("Failed to create ticket")
             fakeTicketId = newTicketId
         }
@@ -227,6 +233,15 @@ class HomeViewModel(
             )
             ticketDetailsRepo.addItem(detail)
         }
+
+        // Update ticket total
+        val allItems = ticketDetailsRepo.getItems(ticketId).firstOrNull() ?: emptyList()
+        val newTotal = allItems.sumOf { it.price * it.qty }
+        val ticket = ticketsRepo.getTicketById(ticketId)
+        if (ticket != null) {
+            ticketsRepo.updateTicket(ticket.copy(total = newTotal))
+        }
+
         _addToTicketItem.value = itemId
     }
 

@@ -54,4 +54,22 @@ abstract class BaseManageItemFragment : Fragment() {
         )
         snackbar.show()
     }
+
+    protected fun updateColorBorder(selectedColor: String) {
+        // Reset all borders to unselected
+        binding.border1.setBackgroundResource(R.drawable.color_selector_unselected)
+        binding.border2.setBackgroundResource(R.drawable.color_selector_unselected)
+        binding.border3.setBackgroundResource(R.drawable.color_selector_unselected)
+        binding.border4.setBackgroundResource(R.drawable.color_selector_unselected)
+        binding.border5.setBackgroundResource(R.drawable.color_selector_unselected)
+
+        // Set selected border
+        when (selectedColor.uppercase()) {
+            "#FFFF0000" -> binding.border1.setBackgroundResource(R.drawable.color_selector_selected)
+            "#FFFFA500" -> binding.border2.setBackgroundResource(R.drawable.color_selector_selected)
+            "#FFFFFF00" -> binding.border3.setBackgroundResource(R.drawable.color_selector_selected)
+            "#FF00FF00" -> binding.border4.setBackgroundResource(R.drawable.color_selector_selected)
+            "#FF0000FF" -> binding.border5.setBackgroundResource(R.drawable.color_selector_selected)
+        }
+    }
 }

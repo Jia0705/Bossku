@@ -54,6 +54,7 @@ class TicketFragment : Fragment() {
                     override fun onClickDelete() {
                         val id = ticket.id ?: return
                         viewModel.deleteTicket(id)
+                        dialog.dismiss()
                     }
                 })
                 dialog.show(parentFragmentManager, "confirm_delete_ticket")

@@ -50,6 +50,7 @@ class EditItemFragment : BaseManageItemFragment() {
                     binding.etCost.setText(item.cost.toString())
                     binding.etBarcode.setText(item.barcode.orEmpty())
                     viewModel.color.value = item.color
+                    updateColorBorder(item.color)
 
                     val categories = app.categoriesRepo.getCategories().firstOrNull() ?: emptyList()
                     val cat = categories.find { it.id == item.categoryId }
@@ -72,11 +73,30 @@ class EditItemFragment : BaseManageItemFragment() {
         }
 
         // Colors
-        binding.c1.setOnClickListener { viewModel.color.value = "#FFFF0000" }
-        binding.c2.setOnClickListener { viewModel.color.value = "#FFFFA500" }
-        binding.c3.setOnClickListener { viewModel.color.value = "#FFFFFF00" }
-        binding.c4.setOnClickListener { viewModel.color.value = "#FF00FF00" }
-        binding.c5.setOnClickListener { viewModel.color.value = "#FF0000FF" }
+        binding.c1.setOnClickListener { 
+            viewModel.color.value = "#FFFF0000"
+            updateColorBorder("#FFFF0000")
+        }
+        binding.c2.setOnClickListener { 
+            viewModel.color.value = "#FFFFA500"
+            updateColorBorder("#FFFFA500")
+        }
+        binding.c3.setOnClickListener { 
+            viewModel.color.value = "#FFFFFF00"
+            updateColorBorder("#FFFFFF00")
+        }
+        binding.c4.setOnClickListener { 
+            viewModel.color.value = "#FF00FF00"
+            updateColorBorder("#FF00FF00")
+        }
+        binding.c5.setOnClickListener { 
+            viewModel.color.value = "#FF0000FF"
+            updateColorBorder("#FF0000FF")
+        }
+        binding.btnResetColor.setOnClickListener { 
+            viewModel.color.value = "#FFFFFF"
+            updateColorBorder("#FFFFFF")
+        }
 
         //  When back from Add Category -> rebuild and select the new one
         setFragmentResultListener("manage_category") { _, _ ->

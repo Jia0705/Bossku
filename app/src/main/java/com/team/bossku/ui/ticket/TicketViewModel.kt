@@ -25,7 +25,7 @@ class TicketViewModel(
         viewModelScope.launch {
             ticketsRepo.getTickets().collectLatest { list ->
                 _tickets.value = list
-                    .filter { it.status == TicketStatus.SAVED }
+                    .filter { it.status == TicketStatus.SAVED && it.name != "__TEMP__" }
                     .sortedByDescending { it.createdAt }
             }
         }

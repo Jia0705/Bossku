@@ -208,53 +208,103 @@
             android:orientation="horizontal"
             android:paddingTop="@dimen/s">
 
-            <View
-                android:id="@+id/c1"
-                android:layout_width="@dimen/xxxxxl"
-                android:layout_height="@dimen/xxxxxl"
-                android:background="@color/red" />
+            <FrameLayout
+                android:id="@+id/border1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/color_selector_unselected"
+                android:padding="2dp">
+
+                <View
+                    android:id="@+id/c1"
+                    android:layout_width="@dimen/xxxxxl"
+                    android:layout_height="@dimen/xxxxxl"
+                    android:background="@color/red" />
+            </FrameLayout>
 
             <Space
                 android:layout_width="@dimen/xxxl"
                 android:layout_height="wrap_content" />
 
-            <View
-                android:id="@+id/c2"
-                android:layout_width="@dimen/xxxxxl"
-                android:layout_height="@dimen/xxxxxl"
-                android:background="@color/orange" />
+            <FrameLayout
+                android:id="@+id/border2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/color_selector_unselected"
+                android:padding="2dp">
+
+                <View
+                    android:id="@+id/c2"
+                    android:layout_width="@dimen/xxxxxl"
+                    android:layout_height="@dimen/xxxxxl"
+                    android:background="@color/orange" />
+            </FrameLayout>
 
             <Space
                 android:layout_width="@dimen/xxxl"
                 android:layout_height="wrap_content" />
 
-            <View
-                android:id="@+id/c3"
-                android:layout_width="@dimen/xxxxxl"
-                android:layout_height="@dimen/xxxxxl"
-                android:background="@color/yellow" />
+            <FrameLayout
+                android:id="@+id/border3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/color_selector_unselected"
+                android:padding="2dp">
+
+                <View
+                    android:id="@+id/c3"
+                    android:layout_width="@dimen/xxxxxl"
+                    android:layout_height="@dimen/xxxxxl"
+                    android:background="@color/yellow" />
+            </FrameLayout>
 
             <Space
                 android:layout_width="@dimen/xxxl"
                 android:layout_height="wrap_content" />
 
-            <View
-                android:id="@+id/c4"
-                android:layout_width="@dimen/xxxxxl"
-                android:layout_height="@dimen/xxxxxl"
-                android:background="@color/green" />
+            <FrameLayout
+                android:id="@+id/border4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/color_selector_unselected"
+                android:padding="2dp">
+
+                <View
+                    android:id="@+id/c4"
+                    android:layout_width="@dimen/xxxxxl"
+                    android:layout_height="@dimen/xxxxxl"
+                    android:background="@color/green" />
+            </FrameLayout>
 
             <Space
                 android:layout_width="@dimen/xxxl"
                 android:layout_height="wrap_content" />
 
-            <View
-                android:id="@+id/c5"
-                android:layout_width="@dimen/xxxxxl"
-                android:layout_height="@dimen/xxxxxl"
-                android:background="@color/blue" />
+            <FrameLayout
+                android:id="@+id/border5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/color_selector_unselected"
+                android:padding="2dp">
+
+                <View
+                    android:id="@+id/c5"
+                    android:layout_width="@dimen/xxxxxl"
+                    android:layout_height="@dimen/xxxxxl"
+                    android:background="@color/blue" />
+            </FrameLayout>
 
         </LinearLayout>
+
+        <!-- Reset Color Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnResetColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/m"
+            android:text="@string/reset_color"
+            style="@style/Widget.Material3.Button.TextButton" />
 
         <!-- Save + Delete -->
         <LinearLayout

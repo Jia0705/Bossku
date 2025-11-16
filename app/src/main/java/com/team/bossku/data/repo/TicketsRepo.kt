@@ -20,6 +20,10 @@ class TicketsRepo(
         return dao.getAllTickets()
     }
 
+    suspend fun getTicketById(id: Int): Ticket? {
+        return dao.getTicketById(id)
+    }
+
     suspend fun updateTicket(ticket: Ticket) {
         dao.updateTicket(ticket)
     }
@@ -53,5 +57,9 @@ class TicketsRepo(
             )
             dao.updateTicket(updatedTicket)
         }
+    }
+
+    suspend fun getFakeTicket(): Ticket? {
+        return dao.getFakeTicket()
     }
 }

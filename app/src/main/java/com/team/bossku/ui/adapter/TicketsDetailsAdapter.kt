@@ -26,7 +26,7 @@ class TicketsDetailsAdapter(
     override fun getItemCount(): Int = details.size
 
     fun setDetails(list: List<TicketDetail>) {
-        details = list
+        details = list.toList()
         notifyDataSetChanged()
     }
 

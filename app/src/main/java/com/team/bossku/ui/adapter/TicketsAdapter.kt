@@ -29,7 +29,7 @@ class TicketsAdapter(
     override fun getItemCount(): Int = tickets.size
 
     fun setTickets(list: List<Ticket>) {
-        tickets = list
+        tickets = list.toList()
         notifyDataSetChanged()
     }
 

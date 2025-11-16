@@ -53,4 +53,5 @@
     <string name="enter_quantity">Masukkan Kuantiti</string>
     <string name="pay">Bayar</string>
     <string name="paid">Dibayar</string>
+    <string name="reset_color">Tetapkan Semula</string>
 </resources>

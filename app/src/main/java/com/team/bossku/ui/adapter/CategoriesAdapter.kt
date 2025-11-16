@@ -26,7 +26,7 @@ class CategoriesAdapter(
     override fun getItemCount(): Int = categories.size
 
     fun setCategories(list: List<Category>) {
-        categories = list
+        categories = list.toList()
         notifyDataSetChanged()
     }
 

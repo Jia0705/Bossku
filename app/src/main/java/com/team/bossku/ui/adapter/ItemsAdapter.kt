@@ -26,7 +26,7 @@ class ItemsAdapter(
     override fun getItemCount(): Int = items.size
 
     fun setItems(list: List<Item>) {
-        items = list
+        items = list.toList()
         notifyDataSetChanged()
     }
 
