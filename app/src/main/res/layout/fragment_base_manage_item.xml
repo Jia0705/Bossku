@@ -215,11 +215,18 @@
                 android:background="@drawable/color_selector_unselected"
                 android:padding="2dp">
 
-                <View
-                    android:id="@+id/c1"
+                <FrameLayout
                     android:layout_width="@dimen/xxxxxl"
                     android:layout_height="@dimen/xxxxxl"
-                    android:background="@color/red" />
+                    android:background="@drawable/color_background"
+                    android:padding="4dp">
+
+                    <View
+                        android:id="@+id/c1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/red" />
+                </FrameLayout>
             </FrameLayout>
 
             <Space
@@ -233,11 +240,18 @@
                 android:background="@drawable/color_selector_unselected"
                 android:padding="2dp">
 
-                <View
-                    android:id="@+id/c2"
+                <FrameLayout
                     android:layout_width="@dimen/xxxxxl"
                     android:layout_height="@dimen/xxxxxl"
-                    android:background="@color/orange" />
+                    android:background="@drawable/color_background"
+                    android:padding="4dp">
+
+                    <View
+                        android:id="@+id/c2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/orange" />
+                </FrameLayout>
             </FrameLayout>
 
             <Space
@@ -251,11 +265,18 @@
                 android:background="@drawable/color_selector_unselected"
                 android:padding="2dp">
 
-                <View
-                    android:id="@+id/c3"
+                <FrameLayout
                     android:layout_width="@dimen/xxxxxl"
                     android:layout_height="@dimen/xxxxxl"
-                    android:background="@color/yellow" />
+                    android:background="@drawable/color_background"
+                    android:padding="4dp">
+
+                    <View
+                        android:id="@+id/c3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/yellow" />
+                </FrameLayout>
             </FrameLayout>
 
             <Space
@@ -269,11 +290,18 @@
                 android:background="@drawable/color_selector_unselected"
                 android:padding="2dp">
 
-                <View
-                    android:id="@+id/c4"
+                <FrameLayout
                     android:layout_width="@dimen/xxxxxl"
                     android:layout_height="@dimen/xxxxxl"
-                    android:background="@color/green" />
+                    android:background="@drawable/color_background"
+                    android:padding="4dp">
+
+                    <View
+                        android:id="@+id/c4"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/green" />
+                </FrameLayout>
             </FrameLayout>
 
             <Space
@@ -287,11 +315,18 @@
                 android:background="@drawable/color_selector_unselected"
                 android:padding="2dp">
 
-                <View
-                    android:id="@+id/c5"
+                <FrameLayout
                     android:layout_width="@dimen/xxxxxl"
                     android:layout_height="@dimen/xxxxxl"
-                    android:background="@color/blue" />
+                    android:background="@drawable/color_background"
+                    android:padding="4dp">
+
+                    <View
+                        android:id="@+id/c5"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/blue" />
+                </FrameLayout>
             </FrameLayout>
 
         </LinearLayout>
