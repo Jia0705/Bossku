@@ -69,7 +69,7 @@ abstract class BaseManageCategoryFragment : Fragment() {
             "#FFFFA500" -> binding.border2.setBackgroundResource(R.drawable.color_selector_selected)
             "#FFFFFF00" -> binding.border3.setBackgroundResource(R.drawable.color_selector_selected)
             "#FF00FF00" -> binding.border4.setBackgroundResource(R.drawable.color_selector_selected)
-            "#FF0000FF" -> binding.border5.setBackgroundResource(R.drawable.color_selector_selected)
+            "#FF00A0FF" -> binding.border5.setBackgroundResource(R.drawable.color_selector_selected)
         }
     }
 
@@ -91,8 +91,8 @@ abstract class BaseManageCategoryFragment : Fragment() {
             updateColorBorder("#FF00FF00")
         }
         binding.c5.setOnClickListener { 
-            viewModel.color.value = "#FF0000FF"
-            updateColorBorder("#FF0000FF")
+            viewModel.color.value = "#FF00A0FF"
+            updateColorBorder("#FF00A0FF")
         }
         binding.btnResetColor.setOnClickListener { 
             viewModel.color.value = "#FFFFFF"
