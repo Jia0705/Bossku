@@ -54,4 +54,17 @@
     <string name="pay">Bayar</string>
     <string name="paid">Dibayar</string>
     <string name="reset_color">Tetapkan Semula</string>
+    <string name="quick_save">Simpan Pantas</string>
+    <string name="ticket_saved">Resit berjaya disimpan</string>
+    <string name="switch_mode">Tukar Mod</string>
+    <string name="cart_items">Item Troli</string>
+    <string name="add_quantity">Tambah Kuantiti</string>
+    <string name="increase">+</string>
+    <string name="decrease">-</string>
+    <string name="empty_hint">Tekan butang + di bawah untuk bermula</string>
+    <string name="empty_item_hint">Tambah item pertama anda untuk mula menerima pesanan</string>
+    <string name="empty_category_hint">Cipta kategori untuk menyusun item anda</string>
+    <string name="select_table">Pilih Meja</string>
+    <string name="or_custom_name">Atau masukkan nama sendiri</string>
+    <string name="add_items">Tambah Item</string>
 </resources>

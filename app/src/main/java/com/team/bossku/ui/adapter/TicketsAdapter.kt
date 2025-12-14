@@ -11,7 +11,7 @@ import java.util.Date
 
 class TicketsAdapter(
     private var tickets: List<Ticket> = emptyList(),
-    private val onLongClick: ((Ticket) -> Unit)? = null,
+    private val onDeleteClick: ((Ticket) -> Unit)? = null,
     private val onClick: (Ticket) -> Unit
 ) : RecyclerView.Adapter<TicketsAdapter.TicketViewHolder>() {
 
@@ -47,13 +47,9 @@ class TicketsAdapter(
             binding.tvTotal.text = "RM " + String.format("%.2f", ticket.total)
             binding.clTicket.setOnClickListener { onClick(ticket) }
 
-            binding.clTicket.setOnLongClickListener {
-                if (onLongClick != null) {
-                    onLongClick(ticket)
-                    true
-                } else {
-                    false
-                }
+            // Delete button click
+            binding.ibDelete.setOnClickListener {
+                onDeleteClick?.invoke(ticket)
             }
         }
     }

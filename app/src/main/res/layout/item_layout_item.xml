@@ -19,14 +19,25 @@
         <TextView
             android:id="@+id/tvName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:gravity="center"
             android:text="@string/name"
-            android:textSize="@dimen/tx_xxl"
+            android:textSize="@dimen/tx_xl"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:maxLines="2"
             android:ellipsize="end" />
+
+        <TextView
+            android:id="@+id/tvPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="RM 0.00"
+            android:textSize="@dimen/tx_l"
+            android:textColor="@color/black"
+            android:layout_marginTop="@dimen/xxs" />
 
     </LinearLayout>
 

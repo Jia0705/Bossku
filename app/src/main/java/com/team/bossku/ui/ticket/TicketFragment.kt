@@ -47,7 +47,7 @@ class TicketFragment : Fragment() {
                 val action = TicketFragmentDirections.actionTicketFragmentToTicketDetailFragment(ticket.id!!)
                 findNavController().navigate(action)
             },
-            onLongClick = { ticket ->
+            onDeleteClick = { ticket ->
                 val dialog = DeletePopFragment()
                 dialog.setListener(object : DeletePopFragment.Listener {
                     override fun onClickCancel() { }

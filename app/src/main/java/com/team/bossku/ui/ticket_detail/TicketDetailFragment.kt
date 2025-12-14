@@ -50,11 +50,29 @@ class TicketDetailFragment : Fragment() {
                     if (ticket.ticket.status == TicketStatus.PAID) {
                         binding.mbSave.text = getString(R.string.paid)
                         binding.mbSave.isEnabled = false
+                        binding.mbAddItems.visibility = View.GONE
                     } else {
                         binding.mbSave.text = getString(R.string.pay)
                         binding.mbSave.isEnabled = true
+                        binding.mbAddItems.visibility = View.VISIBLE
                     }
                 }
+            }
+        }
+        
+        lifecycleScope.launch {
+            viewModel.ticketDeleted.collect { deleted ->
+                if (deleted) {
+                    findNavController().popBackStack()
+                }
+            }
+        }
+
+        binding.mbAddItems.setOnClickListener {
+            val currentTicket = viewModel.ticket.value
+            if (currentTicket != null && currentTicket.ticket.status != TicketStatus.PAID) {
+                // Navigate to home to add more items
+                findNavController().navigate(R.id.homeFragment)
             }
         }
 

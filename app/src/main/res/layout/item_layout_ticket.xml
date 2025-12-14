@@ -39,7 +39,20 @@
             android:ellipsize="end"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTicketId"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintEnd_toStartOf="@id/tvTotal" />
+
+        <!-- Delete Button -->
+        <ImageButton
+            android:id="@+id/ibDelete"
+            android:layout_width="@dimen/xxl"
+            android:layout_height="@dimen/xxl"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_delete"
+            android:contentDescription="@string/delete"
+            app:tint="@color/red"
+            android:padding="@dimen/xxs"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Total Price -->
         <TextView
@@ -48,11 +61,12 @@
             android:layout_height="wrap_content"
             android:text="@string/total"
             android:textSize="@dimen/tx_xl"
+            android:textStyle="bold"
             android:maxLines="1"
             android:ellipsize="end"
+            android:layout_marginTop="@dimen/xxs"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tvTicketId"
-            app:layout_constraintBottom_toBottomOf="@id/tvTime" />
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

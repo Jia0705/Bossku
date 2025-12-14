@@ -71,4 +71,5 @@ dependencies {
     kapt("androidx.room:room-compiler:2.7.2")
 
     implementation("androidx.datastore:datastore-preferences:1.1.7")
+    implementation("com.google.android.material:material:1.12.0")
 }

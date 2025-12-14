@@ -54,4 +54,17 @@
     <string name="pay">Pay</string>
     <string name="paid">Paid</string>
     <string name="reset_color">Reset to Default</string>
+    <string name="quick_save">Quick Save</string>
+    <string name="ticket_saved">Ticket saved successfully</string>
+    <string name="switch_mode">Switch Mode</string>
+    <string name="cart_items">Cart Items</string>
+    <string name="add_quantity">Add Quantity</string>
+    <string name="increase">+</string>
+    <string name="decrease">-</string>
+    <string name="empty_hint">Tap the + button below to get started</string>
+    <string name="empty_item_hint">Add your first item to start taking orders</string>
+    <string name="empty_category_hint">Create categories to organize your items</string>
+    <string name="select_table">Select Table</string>
+    <string name="or_custom_name">Or enter custom name</string>
+    <string name="add_items">Add Items</string>
 </resources>

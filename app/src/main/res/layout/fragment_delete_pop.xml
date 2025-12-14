@@ -68,7 +68,7 @@
                     android:textColor="@color/white"
                     android:paddingVertical="@dimen/m"
                     app:cornerRadius="@dimen/m"
-                    android:layout_marginEnd="@dimen/xxl"
+                    android:layout_marginEnd="@dimen/m"
                     app:backgroundTint="@color/blue" />
 
                 <com.google.android.material.button.MaterialButton
@@ -81,7 +81,7 @@
                     android:textColor="@color/white"
                     android:paddingVertical="@dimen/m"
                     app:cornerRadius="@dimen/m"
-                    android:layout_marginStart="@dimen/xxl"
+                    android:layout_marginStart="@dimen/m"
                     app:backgroundTint="@color/red" />
 
             </LinearLayout>

@@ -49,6 +49,7 @@ class HistoryDetailFragment : Fragment() {
                     binding.tvTotal.text = String.format("RM %.2f", ticket.total)
                     adapter.setDetails(ticket.items)
                     binding.mbSave.visibility = View.GONE
+                    binding.mbAddItems.visibility = View.GONE
                 }
             }
         }

@@ -23,35 +23,55 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/ticket_name"
+                android:text="@string/select_table"
                 android:textSize="@dimen/tx_xxxl"
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 android:padding="@dimen/xs"/>
 
+            <!-- Table Selection Grid -->
+            <GridLayout
+                android:id="@+id/gridTables"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="3"
+                android:rowCount="2"
+                android:layout_marginTop="@dimen/m"
+                android:layout_marginBottom="@dimen/m">
+
+                <!-- Tables 1-6 will be added programmatically -->
+
+            </GridLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/or_custom_name"
+                android:textSize="@dimen/tx_m"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/m"
+                android:layout_marginBottom="@dimen/xs"/>
+
             <EditText
                 android:id="@+id/etTicketName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/xxl"
+                android:padding="@dimen/m"
                 android:hint="@string/enter_ticket_name"
                 android:textColor="@color/black"
                 android:inputType="text"
                 android:maxLines="1"
-                android:layout_marginTop="@dimen/xxxl"
-                android:layout_marginBottom="@dimen/xxxl"/>
+                android:layout_marginBottom="@dimen/m"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/mbSave"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/save"
                 android:textSize="@dimen/tx_xl"
                 android:textColor="@color/white"
-                android:layout_gravity="center"
                 app:cornerRadius="@dimen/m"
                 android:paddingVertical="@dimen/m"
-                android:paddingHorizontal="@dimen/xxxxxl"
                 app:backgroundTint="@color/blue"/>
 
         </LinearLayout>

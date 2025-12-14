@@ -36,6 +36,7 @@ class ItemsAdapter(
 
         fun bind(item: Item) {
             binding.tvName.text = item.name
+            binding.tvPrice.text = String.format("RM %.2f", item.price)
             binding.llItem.setOnClickListener { onClick(item) }
             binding.cvItem.setCardBackgroundColor(item.color.toColorInt())
         }

@@ -54,4 +54,17 @@
     <string name="pay">支付</string>
     <string name="paid">已支付</string>
     <string name="reset_color">重置为默认</string>
+    <string name="quick_save">快速保存</string>
+    <string name="ticket_saved">小票保存成功</string>
+    <string name="switch_mode">切换模式</string>
+    <string name="cart_items">购物车商品</string>
+    <string name="add_quantity">添加数量</string>
+    <string name="increase">+</string>
+    <string name="decrease">-</string>
+    <string name="empty_hint">点击下方 + 按钮开始使用</string>
+    <string name="empty_item_hint">添加您的第一个商品以开始接单</string>
+    <string name="empty_category_hint">创建分类来组织您的商品</string>
+    <string name="select_table">选择桌号</string>
+    <string name="or_custom_name">或输入自定义名称</string>
+    <string name="add_items">添加商品</string>
 </resources>

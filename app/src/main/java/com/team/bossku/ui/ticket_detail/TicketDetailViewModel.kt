@@ -20,6 +20,9 @@ class TicketDetailViewModel(
 ) : ViewModel() {
     private val _ticket = MutableStateFlow<TicketWithDetails?>(null)
     val ticket: StateFlow<TicketWithDetails?> = _ticket
+    
+    private val _ticketDeleted = MutableStateFlow(false)
+    val ticketDeleted: StateFlow<Boolean> = _ticketDeleted
 
     fun loadTicket(ticketId: Int) {
         viewModelScope.launch {
@@ -66,8 +69,16 @@ class TicketDetailViewModel(
                 ticketsRepo.deleteTicketDetail(it)
             }
 
-            val newTotal = items.sumOf { it.price * it.qty }
-            ticketsRepo.updateTicket(ticket.copy(total = newTotal))
+            // If no items left, delete the ticket
+            if (items.isEmpty()) {
+                ticket.id?.let { ticketId ->
+                    ticketsRepo.deleteTicket(ticketId)
+                    _ticketDeleted.value = true
+                }
+            } else {
+                val newTotal = items.sumOf { it.price * it.qty }
+                ticketsRepo.updateTicket(ticket.copy(total = newTotal))
+            }
         }
 
         _ticket.value = current.copy(items = items)

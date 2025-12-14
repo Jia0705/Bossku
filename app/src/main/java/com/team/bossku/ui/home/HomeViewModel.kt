@@ -12,6 +12,7 @@ import com.team.bossku.data.model.Category
 import com.team.bossku.data.model.Item
 import com.team.bossku.data.model.Ticket
 import com.team.bossku.data.model.TicketDetail
+import com.team.bossku.data.model.TicketStatus
 import com.team.bossku.data.repo.TicketDetailsRepo
 import com.team.bossku.data.repo.CategoriesRepo
 import com.team.bossku.data.repo.ItemsRepo
@@ -53,6 +54,9 @@ class HomeViewModel(
     private val _addToTicketItem = MutableStateFlow<Int?>(null)
     val addToTicketItem: StateFlow<Int?> = _addToTicketItem
 
+    private val _cartItemCount = MutableStateFlow(0)
+    val cartItemCount: StateFlow<Int> = _cartItemCount
+
     private val _selectedCategoryId = MutableStateFlow<Int?>(null)
 
     private val _manualOrder = MutableStateFlow<List<Int>>(emptyList())
@@ -65,6 +69,12 @@ class HomeViewModel(
         viewModelScope.launch {
             val existingFakeTicket = ticketsRepo.getFakeTicket()
             fakeTicketId = existingFakeTicket?.id
+            // Monitor cart items
+            fakeTicketId?.let { ticketId ->
+                ticketDetailsRepo.getItems(ticketId).collect { items ->
+                    _cartItemCount.value = items.sumOf { it.qty }
+                }
+            }
         }
 
         viewModelScope.launch {
@@ -115,6 +125,11 @@ class HomeViewModel(
             }
             applyFilters()
         }
+    }
+
+    fun clearSelectedCategory() {
+        _selectedCategoryId.value = null
+        applyFilters()
     }
 
     fun setSearch(text: String) {
@@ -242,6 +257,8 @@ class HomeViewModel(
             ticketsRepo.updateTicket(ticket.copy(total = newTotal))
         }
 
+        // Update cart count
+        _cartItemCount.value = allItems.sumOf { it.qty }
         _addToTicketItem.value = itemId
     }
 
@@ -254,22 +271,72 @@ class HomeViewModel(
         return cartItems.isEmpty()
     }
 
+    suspend fun getOccupiedTables(): List<String> {
+        val allTickets = ticketsRepo.getTickets().firstOrNull() ?: emptyList()
+        val occupiedTables = mutableListOf<String>()
+        
+        for (ticket in allTickets) {
+            if (ticket.status == TicketStatus.SAVED && ticket.name != "__TEMP__") {
+                val items = ticketDetailsRepo.getItems(ticket.id!!).firstOrNull() ?: emptyList()
+                if (items.isNotEmpty()) {
+                    occupiedTables.add(ticket.name)
+                }
+            }
+        }
+        
+        return occupiedTables
+    }
+
     suspend fun saveCartAsTicket(name: String): Boolean {
         val ticketId = fakeTicketId ?: return false
         val cartItems = ticketDetailsRepo.getItems(ticketId).firstOrNull() ?: emptyList()
         if (cartItems.isEmpty()) return false
 
-        val ticket = Ticket(id = null, name = name, total = cartItems.sumOf { it.price * it.qty })
-        val newTicketId = ticketsRepo.addTicket(ticket)
+        // Check if ticket with same name already exists
+        val existingTickets = ticketsRepo.getTickets().firstOrNull() ?: emptyList()
+        val existingTicket = existingTickets.find { it.name == name && it.status == TicketStatus.SAVED }
 
-        cartItems.forEach { item ->
-            ticketDetailsRepo.addItem(item.copy(id = null, ticketId = newTicketId))
+        val targetTicketId: Int = if (existingTicket != null) {
+            // Add to existing ticket
+            existingTicket.id!!
+        } else {
+            // Create new ticket
+            val ticket = Ticket(id = null, name = name, total = 0.0)
+            ticketsRepo.addTicket(ticket)
+        }
+
+        // Add cart items to target ticket (merge duplicates)
+        val existingItems = ticketDetailsRepo.getItems(targetTicketId).firstOrNull() ?: emptyList()
+        
+        cartItems.forEach { cartItem ->
+            val existingItem = existingItems.find { it.itemId == cartItem.itemId }
+            if (existingItem != null) {
+                // Item already exists, increase quantity
+                ticketDetailsRepo.updateItem(existingItem.copy(qty = existingItem.qty + cartItem.qty))
+            } else {
+                // New item, add it
+                ticketDetailsRepo.addItem(cartItem.copy(id = null, ticketId = targetTicketId))
+            }
+        }
+
+        // Update ticket total
+        val allItems = ticketDetailsRepo.getItems(targetTicketId).firstOrNull() ?: emptyList()
+        val newTotal = allItems.sumOf { it.price * it.qty }
+        val ticket = ticketsRepo.getTicketById(targetTicketId)
+        if (ticket != null) {
+            ticketsRepo.updateTicket(ticket.copy(total = newTotal))
         }
 
         ticketDetailsRepo.clearCart(ticketId)
         ticketsRepo.deleteTicket(ticketId)
         fakeTicketId = null
+        _cartItemCount.value = 0
         return true
+    }
+
+    fun generateTicketName(): String {
+        val timestamp = java.text.SimpleDateFormat("yyyyMMdd-HHmmss", java.util.Locale.getDefault()).format(java.util.Date())
+        return "Order-$timestamp"
     }
 
     companion object {

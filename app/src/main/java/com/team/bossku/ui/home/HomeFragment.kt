@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -40,11 +41,23 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupAdapter()
+        setupBackPressHandler()
 
-        binding.toolbar.setOnLongClickListener {
-            val switch = if (viewModel.mode.value == Mode.ITEMS) Mode.CATEGORIES else Mode.ITEMS
-            viewModel.switchMode(switch)
-            true
+        // Toggle between Items and Categories
+        binding.toggleMode.check(R.id.btnItems)
+        binding.toggleMode.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (isChecked) {
+                when (checkedId) {
+                    R.id.btnItems -> {
+                        // Only clear category if currently in Categories mode
+                        if (viewModel.mode.value == Mode.CATEGORIES) {
+                            viewModel.clearSelectedCategory()
+                        }
+                        viewModel.switchMode(Mode.ITEMS)
+                    }
+                    R.id.btnCategories -> viewModel.switchMode(Mode.CATEGORIES)
+                }
+            }
         }
 
         binding.ibSort.setOnClickListener {
@@ -59,9 +72,21 @@ class HomeFragment : Fragment() {
         binding.ibCart.setOnClickListener {
             lifecycleScope.launch {
                 if (!viewModel.isCartEmpty()) {
-                    showSaveTicketDialog()
+                    showCartOptionsDialog()
                 } else {
                     findNavController().navigate(R.id.ticketFragment)
+                }
+            }
+        }
+
+        // Update cart badge
+        lifecycleScope.launch {
+            viewModel.cartItemCount.collect { count ->
+                if (count > 0) {
+                    binding.tvCartBadge.visibility = View.VISIBLE
+                    binding.tvCartBadge.text = if (count > 99) "99+" else count.toString()
+                } else {
+                    binding.tvCartBadge.visibility = View.GONE
                 }
             }
         }
@@ -89,8 +114,10 @@ class HomeFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.mode.collect { mode ->
                 binding.rvItems.adapter = if (mode == Mode.ITEMS) itemsAdapter else categoriesAdapter
-                updateEmptyVisibility()
+                // Update toggle button
+                binding.toggleMode.check(if (mode == Mode.ITEMS) R.id.btnItems else R.id.btnCategories)
                 updateTexts()
+                updateEmptyVisibility()
             }
         }
 
@@ -124,6 +151,23 @@ class HomeFragment : Fragment() {
         }
         updateTexts()
         updateEmptyVisibility()
+    }
+
+    private fun setupBackPressHandler() {
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (viewModel.getSelectedCategoryName() != null) {
+                    // If viewing a specific category, go back to categories mode
+                    viewModel.clearSelectedCategory()
+                    viewModel.switchMode(Mode.CATEGORIES)
+                } else {
+                    // Otherwise, let the system handle back press
+                    isEnabled = false
+                    requireActivity().onBackPressedDispatcher.onBackPressed()
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 
     private fun setupAdapter() {
@@ -176,6 +220,7 @@ class HomeFragment : Fragment() {
         }
         binding.fabAdd.text = if (itemsMode) getString(R.string.add_new_item) else getString(R.string.add_new_category)
         binding.tvEmpty.text = if (itemsMode) getString(R.string.empty_item) else getString(R.string.empty_category)
+        binding.tvEmptyHint.text = if (itemsMode) getString(R.string.empty_item_hint) else getString(R.string.empty_category_hint)
     }
 
     private fun updateEmptyVisibility() {
@@ -184,14 +229,16 @@ class HomeFragment : Fragment() {
         binding.rvItems.visibility = if (empty) View.GONE else View.VISIBLE
     }
 
-    private fun showSaveTicketDialog() {
+    private fun showCartOptionsDialog() {
         val dialog = SavePopFragment()
+        
         dialog.setListener(object : SavePopFragment.Listener {
             override fun onClickSave(name: String) {
                 lifecycleScope.launch {
                     val saved = viewModel.saveCartAsTicket(name)
                     if (saved) {
                         dialog.dismiss()
+                        Toast.makeText(requireContext(), getString(R.string.ticket_saved), Toast.LENGTH_SHORT).show()
                         findNavController().navigate(R.id.ticketFragment)
                     } else {
                         Toast.makeText(requireContext(), getString(R.string.empty), Toast.LENGTH_LONG).show()
@@ -199,6 +246,12 @@ class HomeFragment : Fragment() {
                 }
             }
         })
-        dialog.show(parentFragmentManager, "save_ticket")
+        
+        // Load occupied tables before showing dialog
+        lifecycleScope.launch {
+            val occupiedTables = viewModel.getOccupiedTables()
+            dialog.setOccupiedTables(occupiedTables)
+            dialog.show(parentFragmentManager, "save_ticket")
+        }
     }
 }

@@ -11,16 +11,17 @@
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/xs">
 
-        <ImageButton
-            android:id="@+id/ibBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/l"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            app:tint="?attr/colorOnSurface"
-            android:src="@drawable/ic_back" />
+            <ImageButton
+                android:id="@+id/ibBack"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:padding="@dimen/xxxs"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="?attr/colorOnSurface"
+                android:src="@drawable/ic_back" />
 
         <TextView
             android:id="@+id/tvHeader"
